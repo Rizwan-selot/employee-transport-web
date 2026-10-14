@@ -1404,9 +1404,9 @@ function LiveTracking() {
          <div className="kpi-strip">
           {[
            { n: 2, l: 'Running', c: 'running' },
-           { n: 1, l: 'Completed', c: 'running' },
-           { n: 1, l: 'Upcoming', c: 'inactive' },
-           { n: 0, l: 'Failed', c: 'stopped' },
+           { n: 1, l: 'Completed', c: 'completed' },
+            { n: 1, l: 'Upcoming', c: 'upcoming' },
+            { n: 0, l: 'Failed', c: 'failed' },
            { n: 4, l: 'Total', c: 'total' },
           ].map(k => (
            <div key={k.l} className={`kpi ${k.c}`}>
