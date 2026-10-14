@@ -1821,6 +1821,14 @@ button,input,select { font:inherit; } button { cursor:pointer; } input[type=chec
   padding: 0 4px;
   border-radius: 2px;
 }
+.stop-pending-tag {
+  color: #64748b;
+  font-weight: 700;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  padding: 0 4px;
+  border-radius: 2px;
+}
 .stop-ontime-tag {
   color: #16a34a;
   font-weight: 700;
@@ -1876,9 +1884,11 @@ button,input,select { font:inherit; } button { cursor:pointer; } input[type=chec
   border-radius: 2px;
 }
 .stop-emp-status.boarded { background: #dcfce7; color: #15803d; }
+.stop-emp-status.notboarded { background: #fef3c7; color: #b45309; }
 .stop-emp-status.noshow { background: #fee2e2; color: #b91c1c; }
 .stop-emp-status.pending { background: #f1f5f9; color: #64748b; }
 .stop-emp-status.cancelled { background: #f3f4f6; color: #6b7280; }
+.stop-emp-status.adhoc { background: #e0e7ff; color: #4338ca; }
 .stop-emp-time {
   color: #64748b;
   font-family: monospace;

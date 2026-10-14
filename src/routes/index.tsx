@@ -48,7 +48,7 @@ const shuttleKpis = [
 export interface DetailEmployee {
   name: string;
   gender: 'female' | 'male';
-  status: 'Boarded' | 'Not Boarded' | 'No-show' | 'Pending' | 'Cancelled' | 'Ad-hoc';
+  status: 'Boarded' | 'Not Boarded' | 'No-show' | 'Cancelled' | 'Ad-hoc';
   boardingTime?: string;
   phone: string;
 }
@@ -143,7 +143,7 @@ export const shuttleDetailData: {
       employees: [
         { name: 'Rhea Sharma', gender: 'female' as const, status: 'Boarded' as const, boardingTime: '06:18', phone: '9820112233' },
         { name: 'Amit Shah', gender: 'male' as const, status: 'No-show' as const, boardingTime: '—', phone: '9820445566' },
-        { name: 'Raj Patel', gender: 'male' as const, status: 'Pending' as const, boardingTime: '—', phone: '9820778899' },
+        { name: 'Raj Patel', gender: 'male' as const, status: 'Not Boarded' as const, boardingTime: '—', phone: '9820778899' },
       ],
     },
     {
@@ -187,9 +187,9 @@ export const shuttleDetailData: {
       isLate: false,
       employeeCount: '0/3',
       employees: [
-        { name: 'Rahul Gupta', gender: 'male' as const, status: 'Pending' as const, boardingTime: '—', phone: '9820111222' },
-        { name: 'Pooja Verma', gender: 'female' as const, status: 'Pending' as const, boardingTime: '—', phone: '9820333444' },
-        { name: 'Deepa Seth', gender: 'female' as const, status: 'Pending' as const, boardingTime: '—', phone: '9820555666' },
+        { name: 'Rahul Gupta', gender: 'male' as const, status: 'Not Boarded' as const, boardingTime: '—', phone: '9820111222' },
+        { name: 'Pooja Verma', gender: 'female' as const, status: 'Not Boarded' as const, boardingTime: '—', phone: '9820333444' },
+        { name: 'Deepa Seth', gender: 'female' as const, status: 'Not Boarded' as const, boardingTime: '—', phone: '9820555666' },
       ],
     },
     {
@@ -203,8 +203,8 @@ export const shuttleDetailData: {
       isLate: false,
       employeeCount: '0/4',
       employees: [
-        { name: 'Rohit Deshmukh', gender: 'male' as const, status: 'Pending' as const, boardingTime: '—', phone: '9820777888' },
-        { name: 'Ananya Roy', gender: 'female' as const, status: 'Pending' as const, boardingTime: '—', phone: '9820999000' },
+        { name: 'Rohit Deshmukh', gender: 'male' as const, status: 'Not Boarded' as const, boardingTime: '—', phone: '9820778888' },
+        { name: 'Ananya Roy', gender: 'female' as const, status: 'Not Boarded' as const, boardingTime: '—', phone: '9820999000' },
       ],
     },
     {
@@ -218,7 +218,7 @@ export const shuttleDetailData: {
       isLate: false,
       employeeCount: '0/3',
       employees: [
-        { name: 'Office Main Campus', gender: 'male' as const, status: 'Pending' as const, boardingTime: '—', phone: '9820000000' },
+        { name: 'Office Main Campus', gender: 'male' as const, status: 'Not Boarded' as const, boardingTime: '—', phone: '9820000000' },
       ],
     },
   ],
@@ -1806,7 +1806,7 @@ function LiveTracking() {
            className="remaining-stops-header"
            onClick={() => setIsRemainingStopsExpanded(!isRemainingStopsExpanded)}
           >
-           <span>{shuttleDetailData.stops.length - 1} Remaining Stops</span>
+           <span>{shuttleDetailData.stops.length - 1} Stops</span>
            {isRemainingStopsExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
           </div>
 
@@ -1849,11 +1849,11 @@ function LiveTracking() {
                  <strong>{stop.planned}</strong>
                 </div>
                 <div className="stop-time-item">
-                 <span>{stop.status.startsWith('reached') ? 'Actual:' : 'ETA:'}</span>
-                 <strong>{stop.etaOrActual}</strong>
+                 <span>Actual:</span>
+                 <strong>{stop.status.startsWith('reached') ? stop.etaOrActual : '—'}</strong>
                 </div>
                 {stop.delay && (
-                 <span className={stop.isLate ? 'stop-delay-tag' : 'stop-ontime-tag'}>
+                 <span className={stop.status === 'pending' ? 'stop-pending-tag' : stop.isLate ? 'stop-delay-tag' : 'stop-ontime-tag'}>
                   {stop.delay}
                  </span>
                 )}
