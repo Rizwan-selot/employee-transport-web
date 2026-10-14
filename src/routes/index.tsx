@@ -256,7 +256,6 @@ const shuttleTrips: ShuttleTrip[] = [
   vehicles: [
    { id: 'veh-8993', vehicleNumber: 'MH-04-MR-8993', driver: 'HP Driver 104', status: 'running', timestamp: '10:01:53' },
    { id: 'veh-2210', vehicleNumber: 'MH-04-AB-2210', driver: 'Suresh Patil', status: 'running', timestamp: '10:02:10' },
-   { id: 'veh-4455', vehicleNumber: 'MH-04-CD-4455', driver: 'Ramesh Sawant', status: 'running', timestamp: '10:00:48' },
   ],
  },
  {
@@ -327,8 +326,6 @@ const shuttleTrips: ShuttleTrip[] = [
   office: 'Mindspace Airoli',
   vehicles: [
    { id: 'veh-9081', vehicleNumber: 'MH-04-HX-9081', driver: 'Pravin Waman', status: 'upcoming', timestamp: '09:45:00' },
-   { id: 'veh-5544', vehicleNumber: 'MH-04-KZ-5544', driver: 'Vijay Deshmukh', status: 'upcoming', timestamp: '09:44:22' },
-   { id: 'veh-3319', vehicleNumber: 'MH-04-LT-3319', driver: 'Anil Kumar', status: 'upcoming', timestamp: '09:43:50' },
   ],
  },
 ];
@@ -1167,7 +1164,7 @@ function LiveTracking() {
  const [showPlannedRoute, setShowPlannedRoute] = useState(true);
  const [followVehicle, setFollowVehicle] = useState(false);
  const [isConnectionRetrying, setIsConnectionRetrying] = useState(false);
- const [selectedVehicleIds, setSelectedVehicleIds] = useState<string[]>([]);
+ const [selectedRouteIds, setSelectedRouteIds] = useState<string[]>([]);
  const [expandedRouteIds, setExpandedRouteIds] = useState<string[]>(['trip-1020959']);
  const [focusedShuttleId, setFocusedShuttleId] = useState<string>('trip-1020959');
  const [focusedVehicleId, setFocusedVehicleId] = useState<string>('veh-8993');
@@ -1219,30 +1216,19 @@ function LiveTracking() {
   return true;
  });
 
- const allVehicleIds = filteredShuttles.flatMap(r => r.vehicles.map(v => v.id));
- const isAllGlobalSelected = allVehicleIds.length > 0 && allVehicleIds.every(id => selectedVehicleIds.includes(id));
- const isSomeGlobalSelected = selectedVehicleIds.length > 0 && !isAllGlobalSelected;
+ const isAllRoutesSelected = filteredShuttles.length > 0 && selectedRouteIds.length === filteredShuttles.length;
+ const isSomeRoutesSelected = selectedRouteIds.length > 0 && !isAllRoutesSelected;
  const toggleAllShuttles = () => {
-  if (isAllGlobalSelected) {
-   setSelectedVehicleIds([]);
+  if (isAllRoutesSelected) {
+   setSelectedRouteIds([]);
   } else {
-   setSelectedVehicleIds(allVehicleIds);
+   setSelectedRouteIds(filteredShuttles.map(r => r.id));
   }
  };
 
- const toggleRouteSelection = (route: ShuttleTrip) => {
-  const routeVehIds = route.vehicles.map(v => v.id);
-  const isAllSelected = routeVehIds.every(id => selectedVehicleIds.includes(id));
-  if (isAllSelected) {
-   setSelectedVehicleIds(prev => prev.filter(id => !routeVehIds.includes(id)));
-  } else {
-   setSelectedVehicleIds(prev => Array.from(new Set([...prev, ...routeVehIds])));
-  }
- };
-
- const toggleVehicleSelection = (vehId: string) => {
-  setSelectedVehicleIds(prev =>
-   prev.includes(vehId) ? prev.filter(id => id !== vehId) : [...prev, vehId]
+ const toggleRouteSelection = (routeId: string) => {
+  setSelectedRouteIds(prev =>
+   prev.includes(routeId) ? prev.filter(id => id !== routeId) : [...prev, routeId]
   );
  };
 
@@ -1507,10 +1493,10 @@ function LiveTracking() {
 
          <div className="search-toolbar">
           <IndeterminateCheckbox
-           checked={isAllGlobalSelected}
-           indeterminate={isSomeGlobalSelected}
+           checked={isAllRoutesSelected}
+           indeterminate={isSomeRoutesSelected}
            onChange={toggleAllShuttles}
-           ariaLabel="Select all shuttle routes and vehicles"
+           ariaLabel="Select all shuttle routes"
           />
           <div className="search-box">
            <input placeholder="Search routes or vehicles" aria-label="Search shuttle routes and vehicles" value={shuttleSearch} onChange={e => setShuttleSearch(e.target.value)}/>
@@ -1525,13 +1511,13 @@ function LiveTracking() {
          <div className="group-header" style={{ justifyContent: 'space-between', padding: '0 8px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
            <IndeterminateCheckbox
-            checked={isAllGlobalSelected}
-            indeterminate={isSomeGlobalSelected}
+            checked={isAllRoutesSelected}
+            indeterminate={isSomeRoutesSelected}
             onChange={toggleAllShuttles}
             ariaLabel="Select all shuttle routes"
            />
            <span style={{ fontSize: '11px', fontWeight: 600 }}>Select All</span>
-           <span style={{ fontSize: '11px', color: 'var(--muted-foreground)' }}>{selectedVehicleIds.length} selected</span>
+           <span style={{ fontSize: '11px', color: 'var(--muted-foreground)' }}>{selectedRouteIds.length} selected</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', color: 'var(--muted-foreground)' }}>
            <span>Showing {filteredShuttles.length} of 4 routes</span>
@@ -1541,10 +1527,7 @@ function LiveTracking() {
          <div className="shuttle-list">
           {filteredShuttles.map(route => {
            const isExpanded = expandedRouteIds.includes(route.id);
-           const routeVehIds = route.vehicles.map(v => v.id);
-           const isAllVehiclesSelected = routeVehIds.length > 0 && routeVehIds.every(id => selectedVehicleIds.includes(id));
-           const isSomeVehiclesSelected = routeVehIds.some(id => selectedVehicleIds.includes(id)) && !isAllVehiclesSelected;
-           const selectedCount = routeVehIds.filter(id => selectedVehicleIds.includes(id)).length;
+           const isRouteSelected = selectedRouteIds.includes(route.id);
            const isRouteFocused = focusedShuttleId === route.id;
 
            return (
@@ -1571,14 +1554,15 @@ function LiveTracking() {
                 {isExpanded ? <ChevronDown size={13}/> : <ChevronRight size={13}/>}
                </button>
 
-               <IndeterminateCheckbox
-                checked={isAllVehiclesSelected}
-                indeterminate={isSomeVehiclesSelected}
+               <input
+                type="checkbox"
+                checked={isRouteSelected}
                 onChange={e => {
                  e.stopPropagation();
-                 toggleRouteSelection(route);
+                 toggleRouteSelection(route.id);
                 }}
-                ariaLabel={`Select all vehicles for ${route.routeName}`}
+                onClick={e => e.stopPropagation()}
+                aria-label={`Select ${route.routeName}`}
                />
 
                <span className={`status-dot ${route.status === 'running' ? 'orange' : route.status === 'completed' ? 'green' : 'blue'}`}/>
@@ -1647,13 +1631,12 @@ function LiveTracking() {
              {isExpanded && (
               <div className="shuttle-children-container">
                {route.vehicles.map(veh => {
-                const isVehSelected = selectedVehicleIds.includes(veh.id);
                 const isVehFocused = focusedVehicleId === veh.id;
 
                 return (
                  <div
                   key={veh.id}
-                  className={`shuttle-vehicle-child-row ${isVehFocused ? 'focused' : ''} ${isVehSelected ? 'is-selected' : ''}`}
+                  className={`shuttle-vehicle-child-row ${isVehFocused ? 'focused' : ''}`}
                   onClick={() => {
                    setFocusedVehicleId(veh.id);
                    setFocusedShuttleId(route.id);
@@ -1663,16 +1646,6 @@ function LiveTracking() {
                   }}
                  >
                   <div className="shuttle-child-left">
-                   <input
-                    type="checkbox"
-                    checked={isVehSelected}
-                    onChange={e => {
-                     e.stopPropagation();
-                     toggleVehicleSelection(veh.id);
-                    }}
-                    onClick={e => e.stopPropagation()}
-                    aria-label={`Select ${veh.vehicleNumber}`}
-                   />
                    <span className={`status-dot ${veh.status === 'running' ? 'orange' : veh.status === 'completed' ? 'green' : 'blue'}`}/>
                   </div>
 
