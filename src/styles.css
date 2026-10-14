@@ -1881,10 +1881,7 @@ button,input,select { font:inherit; } button { cursor:pointer; } input[type=chec
   align-items: center;
   gap: 6px;
   font-size: 11px;
-  padding: 2px 4px;
-  background: #ffffff;
-  border: 1px solid #f1f5f9;
-  border-radius: 2px;
+  padding: 3px 2px;
 }
 .stop-emp-name {
   font-weight: 600;
@@ -1933,15 +1930,10 @@ button,input,select { font:inherit; } button { cursor:pointer; } input[type=chec
   border-bottom: 1px solid #e2e8f0;
   padding: 6px 8px;
   background: #ffffff;
-  border-left: 3px solid transparent;
   transition: background 0.1s ease;
 }
 .timeline-stops-unified .timeline-stop-item:last-child {
   border-bottom: none;
-}
-.timeline-stops-unified .timeline-stop-item.current-stop {
-  background: #f8faff;
-  border-left: 3px solid #2563eb;
 }
 .timeline-stop-item {
   border-bottom: 1px solid #e2e8f0;
