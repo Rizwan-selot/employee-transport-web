@@ -1768,167 +1768,105 @@ function LiveTracking() {
           <span>Stop Timeline ({shuttleDetailData.stops.length} Stops)</span>
          </div>
 
-         {/* Stop 1: Current / Next Stop (Highlighted) */}
-         {(() => {
-          const stop1 = shuttleDetailData.stops[0]!;
-          const isStop1Expanded = expandedStopIds.includes(stop1.id);
-          return (
-           <div className="stop-card-highlighted">
+         {/* Unified Timeline Stops (Open Always, Stop Dropdowns) */}
+         <div className="timeline-stops-unified">
+          {shuttleDetailData.stops.map((stop, idx) => {
+           const isCurrent = stop.status === 'current' || idx === 0;
+           const isExpanded = expandedStopIds.includes(stop.id);
+           return (
             <div
-             className="stop-header-row"
-             onClick={() => {
-              setExpandedStopIds(prev =>
-               prev.includes(stop1.id) ? prev.filter(id => id !== stop1.id) : [...prev, stop1.id]
-              );
-             }}
+             key={stop.id}
+             className={`timeline-stop-item ${isCurrent ? 'current-stop' : ''}`}
             >
-             <span className="stop-badge-num">{stop1.num}</span>
-             <span className="stop-title-text" title={stop1.name}>{stop1.name}</span>
-             <span className="stop-employees-badge">
-              <Users size={10} style={{ display: 'inline', marginRight: 3 }} />
-              {stop1.employeeCount}
-             </span>
-             {isStop1Expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-            </div>
+             <div
+              className="stop-header-row"
+              onClick={() => {
+               setExpandedStopIds(prev =>
+                prev.includes(stop.id) ? prev.filter(id => id !== stop.id) : [...prev, stop.id]
+               );
+              }}
+             >
+              <span
+               className={`stop-badge-num ${
+                isCurrent
+                 ? ''
+                 : stop.status === 'reached_ontime' || stop.status === 'reached_late'
+                 ? 'reached'
+                 : stop.status === 'skipped'
+                 ? 'skipped'
+                 : 'pending'
+               }`}
+              >
+               {stop.num}
+              </span>
+              <span className="stop-title-text" title={stop.name}>{stop.name}</span>
+              <span className="stop-employees-badge">
+               <Users size={10} style={{ display: 'inline', marginRight: 3 }} />
+               {stop.employeeCount}
+              </span>
+              {isExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+             </div>
 
-            <div className="stop-time-grid">
-             <div className="stop-time-item">
-              <span>Planned:</span>
-              <strong>{stop1.planned}</strong>
+             <div className="stop-time-grid">
+              <div className="stop-time-item">
+               <span>Planned:</span>
+               <strong>{stop.planned}</strong>
+              </div>
+              <div className="stop-time-item">
+               <span>{isCurrent ? 'ETA:' : 'Actual:'}</span>
+               <strong>{isCurrent ? stop.etaOrActual : (stop.status.startsWith('reached') ? stop.etaOrActual : '—')}</strong>
+              </div>
+              {stop.delay && (
+               <span
+                className={
+                 isCurrent
+                  ? 'stop-delay-tag'
+                  : stop.status === 'pending'
+                  ? 'stop-pending-tag'
+                  : stop.isLate
+                  ? 'stop-delay-tag'
+                  : 'stop-ontime-tag'
+                }
+               >
+                {stop.delay}
+               </span>
+              )}
              </div>
-             <div className="stop-time-item">
-              <span>ETA:</span>
-              <strong>{stop1.etaOrActual}</strong>
-             </div>
-             {stop1.delay && (
-              <span className="stop-delay-tag">{stop1.delay}</span>
+
+             {/* Expanded Stop Employee List (Dropdown) */}
+             {isExpanded && stop.employees && (
+              <div className="stop-emp-subtable">
+               {stop.employees.map((emp, empIdx) => (
+                <div key={empIdx} className="stop-emp-row">
+                 <span className="stop-emp-name">{emp.name}</span>
+                 <span className={`stop-emp-gender ${emp.gender}`}>
+                  {emp.gender === 'female' ? '♀' : '♂'}
+                 </span>
+                 <span className={`stop-emp-status ${emp.status.toLowerCase().replace(/[^a-z]/g, '')}`}>
+                  {emp.status}
+                 </span>
+                 <span className="stop-emp-time">
+                  {emp.boardingTime || '—'}
+                 </span>
+                 <button
+                  type="button"
+                  className="stop-emp-call"
+                  title={`Call ${emp.name} (${emp.phone})`}
+                  onClick={e => {
+                   e.stopPropagation();
+                   alert(`Calling employee ${emp.name} at ${emp.phone}...`);
+                  }}
+                  style={{ border: 'none', background: 'transparent' }}
+                 >
+                  <Phone size={11} />
+                 </button>
+                </div>
+               ))}
+              </div>
              )}
             </div>
-
-            {/* Expanded Stop Employee List */}
-            {isStop1Expanded && stop1.employees && (
-             <div className="stop-emp-subtable">
-              {stop1.employees.map((emp, idx) => (
-               <div key={idx} className="stop-emp-row">
-                <span className="stop-emp-name">{emp.name}</span>
-                <span className={`stop-emp-gender ${emp.gender}`}>
-                 {emp.gender === 'female' ? '♀' : '♂'}
-                </span>
-                <span className={`stop-emp-status ${emp.status.toLowerCase().replace(/[^a-z]/g, '')}`}>
-                 {emp.status}
-                </span>
-                <span className="stop-emp-time">
-                 {emp.boardingTime || '—'}
-                </span>
-                <button
-                 type="button"
-                 className="stop-emp-call"
-                 title={`Call ${emp.name} (${emp.phone})`}
-                 onClick={() => alert(`Calling employee ${emp.name} at ${emp.phone}...`)}
-                 style={{ border: 'none', background: 'transparent' }}
-                >
-                 <Phone size={11} />
-                </button>
-               </div>
-              ))}
-             </div>
-            )}
-           </div>
-          );
-         })()}
-
-         {/* Remaining Stops Accordion */}
-         <div className="remaining-stops-accordion">
-          <div
-           className="remaining-stops-header"
-           onClick={() => setIsRemainingStopsExpanded(!isRemainingStopsExpanded)}
-          >
-           <span>{shuttleDetailData.stops.length - 1} Stops</span>
-           {isRemainingStopsExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-          </div>
-
-          {isRemainingStopsExpanded && (
-           <div className="remaining-stops-list">
-            {shuttleDetailData.stops.slice(1).map(stop => {
-             const isExpanded = expandedStopIds.includes(stop.id);
-             return (
-              <div key={stop.id} className="timeline-stop-item">
-               <div
-                className="stop-header-row"
-                onClick={() => {
-                 setExpandedStopIds(prev =>
-                  prev.includes(stop.id) ? prev.filter(id => id !== stop.id) : [...prev, stop.id]
-                 );
-                }}
-               >
-                <span
-                 className={`stop-badge-num ${
-                  stop.status === 'reached_ontime' || stop.status === 'reached_late'
-                   ? 'reached'
-                   : stop.status === 'skipped'
-                   ? 'skipped'
-                   : 'pending'
-                 }`}
-                >
-                 {stop.num}
-                </span>
-                <span className="stop-title-text" title={stop.name}>{stop.name}</span>
-                <span className="stop-employees-badge">
-                 <Users size={10} style={{ display: 'inline', marginRight: 3 }} />
-                 {stop.employeeCount}
-                </span>
-                {isExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-               </div>
-
-               <div className="stop-time-grid">
-                <div className="stop-time-item">
-                 <span>Planned:</span>
-                 <strong>{stop.planned}</strong>
-                </div>
-                <div className="stop-time-item">
-                 <span>Actual:</span>
-                 <strong>{stop.status.startsWith('reached') ? stop.etaOrActual : '—'}</strong>
-                </div>
-                {stop.delay && (
-                 <span className={stop.status === 'pending' ? 'stop-pending-tag' : stop.isLate ? 'stop-delay-tag' : 'stop-ontime-tag'}>
-                  {stop.delay}
-                 </span>
-                )}
-               </div>
-
-               {/* Expanded Employee List */}
-               {isExpanded && stop.employees && (
-                <div className="stop-emp-subtable">
-                 {stop.employees.map((emp, idx) => (
-                  <div key={idx} className="stop-emp-row">
-                   <span className="stop-emp-name">{emp.name}</span>
-                   <span className={`stop-emp-gender ${emp.gender}`}>
-                    {emp.gender === 'female' ? '♀' : '♂'}
-                   </span>
-                   <span className={`stop-emp-status ${emp.status.toLowerCase().replace(/[^a-z]/g, '')}`}>
-                    {emp.status}
-                   </span>
-                   <span className="stop-emp-time">
-                    {emp.boardingTime || '—'}
-                   </span>
-                   <button
-                    type="button"
-                    className="stop-emp-call"
-                    title={`Call ${emp.name} (${emp.phone})`}
-                    onClick={() => alert(`Calling employee ${emp.name} at ${emp.phone}...`)}
-                    style={{ border: 'none', background: 'transparent' }}
-                   >
-                    <Phone size={11} />
-                   </button>
-                  </div>
-                 ))}
-                </div>
-               )}
-              </div>
-             );
-            })}
-           </div>
-          )}
+           );
+          })}
          </div>
         </div>
        </div>
