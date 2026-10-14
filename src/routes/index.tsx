@@ -1728,14 +1728,16 @@ function LiveTracking() {
           <BusFront size={14} />
          </div>
          <div className="detail-strip-main">
-          <div className="detail-strip-name">
-           {shuttleDetailData.vehicle?.number || <span className="detail-not-assigned">Not assigned</span>}
+          <div className="detail-vehicle-header">
+           <span className="detail-strip-name">
+            {shuttleDetailData.vehicle?.number || <span className="detail-not-assigned">Not assigned</span>}
+           </span>
+           {shuttleDetailData.vehicle?.number && (
+            <span className="detail-strip-sub">
+             Fleet {shuttleDetailData.vehicle.fleet} | {shuttleDetailData.vehicle.capacity} | {shuttleDetailData.vehicle.type}
+            </span>
+           )}
           </div>
-          {shuttleDetailData.vehicle?.number && (
-           <div className="detail-strip-sub">
-            Fleet {shuttleDetailData.vehicle.fleet} | {shuttleDetailData.vehicle.capacity} | {shuttleDetailData.vehicle.type}
-           </div>
-          )}
           {shuttleDetailData.vehicle?.previousNote && (
            <div className="detail-strip-note">
             {shuttleDetailData.vehicle.previousNote}
