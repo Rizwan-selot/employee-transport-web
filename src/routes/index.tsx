@@ -1839,9 +1839,21 @@ function LiveTracking() {
                {stop.employees.map((emp, empIdx) => (
                 <div key={empIdx} className="stop-emp-row">
                  <span className="stop-emp-name">{emp.name}</span>
-                 <span className={`stop-emp-gender ${emp.gender}`}>
-                  {emp.gender === 'female' ? '♀' : '♂'}
-                 </span>
+                  <span className={`stop-emp-gender ${emp.gender}`} title={emp.gender === 'female' ? 'Female' : 'Male'}>
+                   {emp.gender === 'female' ? (
+                    <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                     <circle cx="12" cy="8" r="5" />
+                     <path d="M12 13v8" />
+                     <path d="M9 17h6" />
+                    </svg>
+                   ) : (
+                    <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                     <circle cx="10" cy="14" r="5" />
+                     <path d="M19 5l-5.4 5.4" />
+                     <path d="M14 5h5v5" />
+                    </svg>
+                   )}
+                  </span>
                  <span className={`stop-emp-status ${emp.status.toLowerCase().replace(/[^a-z]/g, '')}`}>
                   {emp.status}
                  </span>
