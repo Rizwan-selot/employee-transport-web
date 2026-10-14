@@ -1692,14 +1692,14 @@ function LiveTracking() {
                    </div>
 
                    <div className="vehicle-actions">
-                    {[BusFront, KeyRound, Smartphone, RouteIcon, Video, Camera, Volume2, Hand, ClipboardList].map((Icon, j) => {
-                     const labels = ['Vehicle status', 'Ignition', 'Device', 'Route', 'Video', 'Camera', 'Audio', 'Command', 'Details'];
+                    {[BusFront, KeyRound, Smartphone, RouteIcon, Video, ClipboardList].map((Icon, j) => {
+                     const labels = ['Vehicle status', 'Ignition', 'Device', 'Route', 'Video', 'Details'];
                      const isRunning = veh.status === 'running';
                      const actionClass =
                       j === 0 ? (isRunning ? 'action-green' : 'action-blue') :
                       j === 1 ? (isRunning ? 'action-green' : '') :
                       j === 3 ? 'action-link' :
-                      j === 8 ? 'action-blue' : '';
+                      j === 5 ? 'action-blue' : '';
 
                      return (
                       <IconButton
@@ -1709,7 +1709,7 @@ function LiveTracking() {
                        className={actionClass}
                        onClick={(e) => {
                         e.stopPropagation();
-                        if (j === 8) {
+                        if (j === 5) {
                          setFocusedVehicleId(veh.id);
                          setFocusedShuttleId(route.id);
                          setSelectedDetailTripId(route.id);

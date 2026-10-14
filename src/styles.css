@@ -94,11 +94,11 @@ button,input,select { font:inherit; } button { cursor:pointer; } input[type=chec
 .shuttle-child-driver svg {width:10px;height:10px;}
 .shuttle-child-gps {color:#64748b;font-size:10px;}
 
-/* Vehicle Action Icons (6-8px gap, centered vertically) */
-.shuttle-vehicle-child-row .vehicle-actions {display:inline-flex;align-items:center;gap:6px;margin-left:auto;padding-left:10px;flex-shrink:0;}
-.shuttle-vehicle-child-row .vehicle-actions .legacy-button {height:24px;width:20px;color:#64748b;display:inline-flex;align-items:center;justify-content:center;border-radius:2px;}
+/* Vehicle Action Icons: Right-aligned, equal spacing, 5-6 icons */
+.shuttle-vehicle-child-row .vehicle-actions {display:inline-flex;align-items:center;justify-content:flex-end;flex:0 0 auto;margin-left:auto;gap:6px;padding-left:14px;flex-shrink:0;}
+.shuttle-vehicle-child-row .vehicle-actions .legacy-button {height:24px;width:22px;min-width:22px;max-width:22px;padding:0;color:#64748b;display:inline-flex;align-items:center;justify-content:center;border-radius:2px;flex-shrink:0;}
 .shuttle-vehicle-child-row .vehicle-actions .legacy-button:hover {background:#f1f5f9;color:var(--primary);}
-.shuttle-vehicle-child-row .vehicle-actions .legacy-button svg {width:12.5px;height:12.5px;stroke-width:2.3;}
+.shuttle-vehicle-child-row .vehicle-actions .legacy-button svg {width:13px;height:13px;stroke-width:2.2;}
 .shuttle-vehicle-child-row .vehicle-actions .action-green {color:var(--green);}
 .shuttle-vehicle-child-row .vehicle-actions .action-red {color:var(--danger);}
 .shuttle-vehicle-child-row .vehicle-actions .action-blue {color:var(--blue);}
