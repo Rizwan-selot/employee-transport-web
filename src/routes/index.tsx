@@ -11,7 +11,15 @@ export const Route = createFileRoute('/')({
  component: LiveTracking,
 });
 
-interface ShuttleTrip {
+export interface ShuttleVehicle {
+ id: string;
+ vehicleNumber: string;
+ driver: string;
+ status: 'running' | 'completed' | 'upcoming' | 'failed';
+ timestamp: string;
+}
+
+export interface ShuttleTrip {
  id: string;
  routeName: string;
  vehicleChip: string;
@@ -30,6 +38,7 @@ interface ShuttleTrip {
  coords: { top: string; left: string };
  vendor: string;
  office: string;
+ vehicles: ShuttleVehicle[];
 }
 
 const shuttleVendors = ['All', 'City Express Logistics', 'FleetPro Mobility', 'Apex Shuttles', 'Vashi Transport Co.'];
@@ -244,6 +253,11 @@ const shuttleTrips: ShuttleTrip[] = [
   coords: { top: '33%', left: '47%' },
   vendor: 'City Express Logistics',
   office: 'BKC Tech Park',
+  vehicles: [
+   { id: 'veh-8993', vehicleNumber: 'MH-04-MR-8993', driver: 'HP Driver 104', status: 'running', timestamp: '10:01:53' },
+   { id: 'veh-2210', vehicleNumber: 'MH-04-AB-2210', driver: 'Suresh Patil', status: 'running', timestamp: '10:02:10' },
+   { id: 'veh-4455', vehicleNumber: 'MH-04-CD-4455', driver: 'Ramesh Sawant', status: 'running', timestamp: '10:00:48' },
+  ],
  },
  {
   id: 'trip-1020960',
@@ -258,12 +272,16 @@ const shuttleTrips: ShuttleTrip[] = [
   delayText: '(On time)',
   isLate: false,
   vehicleNumber: 'MH-43-BP-1102',
-  driver: 'Suresh Patil',
+  driver: 'Sunil Shinde',
   status: 'running',
   timestamp: '13-10-2026 10:01:45',
   coords: { top: '53%', left: '62%' },
   vendor: 'FleetPro Mobility',
   office: 'Mindspace Airoli',
+  vehicles: [
+   { id: 'veh-1102', vehicleNumber: 'MH-43-BP-1102', driver: 'Sunil Shinde', status: 'running', timestamp: '10:01:45' },
+   { id: 'veh-9821', vehicleNumber: 'MH-43-AK-9821', driver: 'Ganesh More', status: 'running', timestamp: '10:01:12' },
+  ],
  },
  {
   id: 'trip-1020961',
@@ -278,12 +296,15 @@ const shuttleTrips: ShuttleTrip[] = [
   delayText: '(On time)',
   isLate: false,
   vehicleNumber: 'MH-02-ER-4412',
-  driver: 'Ramesh Sawant',
+  driver: 'Mahesh Jadhav',
   status: 'completed',
   timestamp: '13-10-2026 09:58:12',
   coords: { top: '39%', left: '76%' },
   vendor: 'City Express Logistics',
   office: 'BKC Tech Park',
+  vehicles: [
+   { id: 'veh-4412', vehicleNumber: 'MH-02-ER-4412', driver: 'Mahesh Jadhav', status: 'completed', timestamp: '09:58:12' },
+  ],
  },
  {
   id: 'trip-1020962',
@@ -298,12 +319,17 @@ const shuttleTrips: ShuttleTrip[] = [
   delayText: '(On time)',
   isLate: false,
   vehicleNumber: 'MH-04-HX-9081',
-  driver: 'Mahesh Jadhav',
+  driver: 'Pravin Waman',
   status: 'upcoming',
   timestamp: '13-10-2026 09:45:00',
   coords: { top: '68%', left: '52%' },
   vendor: 'Apex Shuttles',
   office: 'Mindspace Airoli',
+  vehicles: [
+   { id: 'veh-9081', vehicleNumber: 'MH-04-HX-9081', driver: 'Pravin Waman', status: 'upcoming', timestamp: '09:45:00' },
+   { id: 'veh-5544', vehicleNumber: 'MH-04-KZ-5544', driver: 'Vijay Deshmukh', status: 'upcoming', timestamp: '09:44:22' },
+   { id: 'veh-3319', vehicleNumber: 'MH-04-LT-3319', driver: 'Anil Kumar', status: 'upcoming', timestamp: '09:43:50' },
+  ],
  },
 ];
 
@@ -1095,6 +1121,35 @@ function TripsLiveMap({
 function IconButton({icon:Icon,label,className='',onClick}:{icon:LucideIcon;label:string;className?:string;onClick?:(e: any)=>void}) {return <Button variant="legacy" className={className} title={label} aria-label={label} onClick={onClick}><Icon /></Button>;}
 function InfoCard({title,rows,action,icon:Icon}:{title:string;rows:{label:string;value:string;stack?:boolean;off?:boolean}[];action:string;icon:LucideIcon}) { const [activated,setActivated]=useState(false); return <section className="info-card"><h2><Icon/>{title}</h2><div className="info-body">{rows.map(row=><div className={`info-row ${row.stack?'stack':''}`} key={row.label}><span className="info-label">{row.label}</span><span className={`info-value ${row.off?'off-road':''}`}>{row.value}</span></div>)}</div><Button variant="legacy" className="card-action" onClick={()=>{setActivated(!activated);if(action==='Share Location' && navigator.clipboard) void navigator.clipboard.writeText('35.43, -97.48');}}>{action==='Share Location'?<Share2/>:<MapPinned/>}{activated?(action==='Share Location'?'Location Copied':'Navigating'):action}</Button></section>;}
 
+function IndeterminateCheckbox({
+ checked,
+ indeterminate = false,
+ onChange,
+ ariaLabel,
+}: {
+ checked: boolean;
+ indeterminate?: boolean;
+ onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+ ariaLabel: string;
+}) {
+ const ref = useRef<HTMLInputElement>(null);
+ useEffect(() => {
+  if (ref.current) {
+   ref.current.indeterminate = Boolean(indeterminate);
+  }
+ }, [indeterminate]);
+ return (
+  <input
+   ref={ref}
+   type="checkbox"
+   checked={checked}
+   onChange={onChange}
+   onClick={e => e.stopPropagation()}
+   aria-label={ariaLabel}
+  />
+ );
+}
+
 function LiveTracking() {
  const [activeTab, setActiveTab] = useState<'trips' | 'shuttle' | 'object'>('trips');
  const [selectedTripId, setSelectedTripId] = useState<string>('emp-11');
@@ -1112,8 +1167,10 @@ function LiveTracking() {
  const [showPlannedRoute, setShowPlannedRoute] = useState(true);
  const [followVehicle, setFollowVehicle] = useState(false);
  const [isConnectionRetrying, setIsConnectionRetrying] = useState(false);
- const [selectedShuttles, setSelectedShuttles] = useState<string[]>([]);
+ const [selectedVehicleIds, setSelectedVehicleIds] = useState<string[]>([]);
+ const [expandedRouteIds, setExpandedRouteIds] = useState<string[]>(['trip-1020959']);
  const [focusedShuttleId, setFocusedShuttleId] = useState<string>('trip-1020959');
+ const [focusedVehicleId, setFocusedVehicleId] = useState<string>('veh-8993');
  const [isVehicleFocused, setIsVehicleFocused] = useState<boolean>(false);
  const [isShuttleFilterOpen, setIsShuttleFilterOpen] = useState(false);
  const [openDropdown, setOpenDropdown] = useState<'vendor' | 'office' | 'shift' | null>(null);
@@ -1141,8 +1198,7 @@ function LiveTracking() {
  const [sorted,setSorted]=useState(false); 
  const [tool,setTool]=useState('');
 
- const toggleShuttle = (id: string) => setSelectedShuttles(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
- const toggleAllShuttles = () => setSelectedShuttles(prev => prev.length === shuttleTrips.length ? [] : shuttleTrips.map(s => s.id));
+ 
  const toggle=(name:string)=>setChecked(prev=>prev.includes(name)?prev.filter(n=>n!==name):[...prev,name]);
  const toggleGroup=(group:string)=>setCollapsed(prev=>prev.includes(group)?prev.filter(g=>g!==group):[...prev,group]);
 
@@ -1151,9 +1207,8 @@ function LiveTracking() {
  const filteredShuttles = shuttleTrips.filter(s => {
   const matchesSearch =
    s.routeName.toLowerCase().includes(shuttleSearch.toLowerCase()) ||
-   s.vehicleNumber.toLowerCase().includes(shuttleSearch.toLowerCase()) ||
    s.tripId.toLowerCase().includes(shuttleSearch.toLowerCase()) ||
-   s.driver.toLowerCase().includes(shuttleSearch.toLowerCase());
+   s.vehicles.some(v => v.vehicleNumber.toLowerCase().includes(shuttleSearch.toLowerCase()) || v.driver.toLowerCase().includes(shuttleSearch.toLowerCase()));
   if (!matchesSearch) return false;
 
   if (appliedVendor !== 'All' && s.vendor !== appliedVendor) return false;
@@ -1164,7 +1219,41 @@ function LiveTracking() {
   return true;
  });
 
+ const allVehicleIds = filteredShuttles.flatMap(r => r.vehicles.map(v => v.id));
+ const isAllGlobalSelected = allVehicleIds.length > 0 && allVehicleIds.every(id => selectedVehicleIds.includes(id));
+ const isSomeGlobalSelected = selectedVehicleIds.length > 0 && !isAllGlobalSelected;
+ const toggleAllShuttles = () => {
+  if (isAllGlobalSelected) {
+   setSelectedVehicleIds([]);
+  } else {
+   setSelectedVehicleIds(allVehicleIds);
+  }
+ };
+
+ const toggleRouteSelection = (route: ShuttleTrip) => {
+  const routeVehIds = route.vehicles.map(v => v.id);
+  const isAllSelected = routeVehIds.every(id => selectedVehicleIds.includes(id));
+  if (isAllSelected) {
+   setSelectedVehicleIds(prev => prev.filter(id => !routeVehIds.includes(id)));
+  } else {
+   setSelectedVehicleIds(prev => Array.from(new Set([...prev, ...routeVehIds])));
+  }
+ };
+
+ const toggleVehicleSelection = (vehId: string) => {
+  setSelectedVehicleIds(prev =>
+   prev.includes(vehId) ? prev.filter(id => id !== vehId) : [...prev, vehId]
+  );
+ };
+
+ const toggleRouteExpanded = (routeId: string) => {
+  setExpandedRouteIds(prev =>
+   prev.includes(routeId) ? prev.filter(id => id !== routeId) : [...prev, routeId]
+  );
+ };
+
  const activeShuttleTrip = shuttleTrips.find(t => t.id === focusedShuttleId) ?? shuttleTrips[0]!;
+ const activeVehicle = activeShuttleTrip.vehicles.find(v => v.id === focusedVehicleId) ?? activeShuttleTrip.vehicles[0]!;
 
  return <main className="tracking-screen">
   <div className="map-surface">
@@ -1417,9 +1506,14 @@ function LiveTracking() {
          </div>
 
          <div className="search-toolbar">
-          <input type="checkbox" aria-label="Select all" checked={selectedShuttles.length === shuttleTrips.length} onChange={toggleAllShuttles}/>
+          <IndeterminateCheckbox
+           checked={isAllGlobalSelected}
+           indeterminate={isSomeGlobalSelected}
+           onChange={toggleAllShuttles}
+           ariaLabel="Select all shuttle routes and vehicles"
+          />
           <div className="search-box">
-           <input placeholder="Search" aria-label="Search shuttle trips" value={shuttleSearch} onChange={e => setShuttleSearch(e.target.value)}/>
+           <input placeholder="Search routes or vehicles" aria-label="Search shuttle routes and vehicles" value={shuttleSearch} onChange={e => setShuttleSearch(e.target.value)}/>
            <IconButton icon={Search} label="Search"/>
           </div>
           <IconButton icon={RefreshCw} label="Refresh" className="square-tool" onClick={() => setShuttleSearch('')}/>
@@ -1430,123 +1524,212 @@ function LiveTracking() {
 
          <div className="group-header" style={{ justifyContent: 'space-between', padding: '0 8px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-           <input type="checkbox" aria-label="Select all shuttle trips" checked={selectedShuttles.length === shuttleTrips.length} onChange={toggleAllShuttles}/>
+           <IndeterminateCheckbox
+            checked={isAllGlobalSelected}
+            indeterminate={isSomeGlobalSelected}
+            onChange={toggleAllShuttles}
+            ariaLabel="Select all shuttle routes"
+           />
            <span style={{ fontSize: '11px', fontWeight: 600 }}>Select All</span>
-           <span style={{ fontSize: '11px', color: 'var(--muted-foreground)' }}>{selectedShuttles.length} selected</span>
+           <span style={{ fontSize: '11px', color: 'var(--muted-foreground)' }}>{selectedVehicleIds.length} selected</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', color: 'var(--muted-foreground)' }}>
-           <span>Showing {filteredShuttles.length} of 4 trips</span>
+           <span>Showing {filteredShuttles.length} of 4 routes</span>
           </div>
          </div>
 
          <div className="shuttle-list">
-          {filteredShuttles.map(trip => (
-           <div
-            key={trip.id}
-            className={`shuttle-trip-item ${focusedShuttleId === trip.id ? 'focused' : ''}`}
-            onClick={() => {
-             setFocusedShuttleId(trip.id);
-             setSelectedDetailTripId(trip.id);
-             setIsVehicleFocused(true);
-             setIsDetailLayerOpen(true);
-            }}
-           >
-            <div className="shuttle-trip-left">
-             <input
-              type="checkbox"
-              checked={selectedShuttles.includes(trip.id)}
-              onChange={e => {
-               e.stopPropagation();
-               toggleShuttle(trip.id);
+          {filteredShuttles.map(route => {
+           const isExpanded = expandedRouteIds.includes(route.id);
+           const routeVehIds = route.vehicles.map(v => v.id);
+           const isAllVehiclesSelected = routeVehIds.length > 0 && routeVehIds.every(id => selectedVehicleIds.includes(id));
+           const isSomeVehiclesSelected = routeVehIds.some(id => selectedVehicleIds.includes(id)) && !isAllVehiclesSelected;
+           const selectedCount = routeVehIds.filter(id => selectedVehicleIds.includes(id)).length;
+           const isRouteFocused = focusedShuttleId === route.id;
+
+           return (
+            <div key={route.id} className={`shuttle-route-group ${isRouteFocused ? 'focused' : ''}`}>
+             {/* PARENT ROUTE ROW */}
+             <div
+              className="shuttle-route-parent-row"
+              onClick={() => {
+               setFocusedShuttleId(route.id);
+               setSelectedDetailTripId(route.id);
+               setIsVehicleFocused(true);
               }}
-              onClick={e => e.stopPropagation()}
-              aria-label={`Select ${trip.routeName}`}
-             />
-             <span className={`status-dot ${trip.status === 'running' ? 'orange' : trip.status === 'completed' ? 'green' : 'blue'}`}/>
-            </div>
-
-            <div className="shuttle-trip-content">
-             {/* ROW 1: [checkbox] [status dot] Route Name | Vehicle Number Shift */}
-             <div className="shuttle-line-1">
-              <span className="shuttle-route-title" title={trip.routeName}>{trip.routeName}</span>
-              <div className="shuttle-line-1-right">
-               <span className="shuttle-vehicle-code">{trip.vehicleNumber}</span>
-               <span className={`shuttle-shift-pill ${trip.shiftType === 'IN' ? 'in' : 'out'}`}>{trip.shiftChip}</span>
-              </div>
-             </div>
-
-             {/* ROW 2: Trip ID | Occupancy | Alert | ETA | Delay */}
-             <div className="shuttle-line-2">
-              <div className="shuttle-line-2-left">
-               <span
-                className="shuttle-trip-link"
+             >
+              <div className="shuttle-parent-left">
+               <button
+                type="button"
+                className="shuttle-chevron-btn"
                 onClick={e => {
                  e.stopPropagation();
-                 setFocusedShuttleId(trip.id);
-                 setSelectedDetailTripId(trip.id);
-                 setIsVehicleFocused(true);
-                 setIsDetailLayerOpen(true);
+                 toggleRouteExpanded(route.id);
                 }}
+                aria-label={isExpanded ? `Collapse ${route.routeName}` : `Expand ${route.routeName}`}
                >
-                {trip.tripId}
-               </span>
-               <span className="shuttle-occupancy-info" title="Occupancy: Boarded(Scheduled)">
-                <Users size={11}/>
-                <span>{trip.occupancy}</span>
-               </span>
-               {trip.hasAlert && (
-                <span className="shuttle-alert-icon" title="Delay Alert">
-                 <Flag size={10} fill="currentColor"/>
-                </span>
-               )}
+                {isExpanded ? <ChevronDown size={13}/> : <ChevronRight size={13}/>}
+               </button>
+
+               <IndeterminateCheckbox
+                checked={isAllVehiclesSelected}
+                indeterminate={isSomeVehiclesSelected}
+                onChange={e => {
+                 e.stopPropagation();
+                 toggleRouteSelection(route);
+                }}
+                ariaLabel={`Select all vehicles for ${route.routeName}`}
+               />
+
+               <span className={`status-dot ${route.status === 'running' ? 'orange' : route.status === 'completed' ? 'green' : 'blue'}`}/>
               </div>
-              <div className="shuttle-line-2-right">
-               <span className="shuttle-eta-val">{trip.eta}</span>
-               <span className={trip.isLate ? 'shuttle-delay-late' : 'shuttle-delay-ontime'}>
-                {trip.delayText.replace(/[()]/g, '')}
-               </span>
+
+              <div className="shuttle-parent-content">
+               {/* ROW 1: Route Name | Shift */}
+               <div className="shuttle-line-1">
+                <span
+                 className="shuttle-route-title"
+                 title={route.routeName}
+                 onClick={e => {
+                  e.stopPropagation();
+                  toggleRouteExpanded(route.id);
+                 }}
+                >
+                 {route.routeName}
+                </span>
+                <span className={`shuttle-shift-pill ${route.shiftType === 'IN' ? 'in' : 'out'}`}>{route.shiftChip}</span>
+               </div>
+
+               {/* ROW 2: Trip ID | Occupancy | Alert | Vehicles Count | ETA | Delay */}
+               <div className="shuttle-line-2">
+                <div className="shuttle-line-2-left">
+                 <span
+                  className="shuttle-trip-link"
+                  onClick={e => {
+                   e.stopPropagation();
+                   setFocusedShuttleId(route.id);
+                   setSelectedDetailTripId(route.id);
+                   setIsVehicleFocused(true);
+                   setIsDetailLayerOpen(true);
+                  }}
+                 >
+                  {route.tripId}
+                 </span>
+                 <span className="shuttle-occupancy-info" title="Occupancy: Boarded(Scheduled)">
+                  <Users size={11}/>
+                  <span>{route.occupancy}</span>
+                 </span>
+                 {route.hasAlert && (
+                  <span className="shuttle-alert-icon" title="Delay Alert">
+                   <Flag size={10} fill="currentColor"/>
+                  </span>
+                 )}
+                 <span className="shuttle-vehicle-count-tag">
+                  {route.vehicles.length} Vehicles
+                 </span>
+                 {isSomeVehiclesSelected && (
+                  <span className="shuttle-selected-ratio-tag">
+                   {selectedCount}/{route.vehicles.length} selected
+                  </span>
+                 )}
+                </div>
+                <div className="shuttle-line-2-right">
+                 <span className="shuttle-eta-val">{route.eta}</span>
+                 <span className={route.isLate ? 'shuttle-delay-late' : 'shuttle-delay-ontime'}>
+                  {route.delayText.replace(/[()]/g, '')}
+                 </span>
+                </div>
+               </div>
               </div>
              </div>
 
-             {/* ROW 3: Driver / secondary info | Existing Trackzee vehicle action icons */}
-             <div className="shuttle-line-3">
-              <span className="shuttle-driver-info" title={`Driver: ${trip.driver}`}>
-               <UserRound size={11}/>
-               <span>{trip.driver}</span>
-              </span>
-              <div className="vehicle-actions">
-               {[BusFront, KeyRound, Smartphone, RouteIcon, Video, Camera, Volume2, Hand, ClipboardList].map((Icon, j) => {
-                const labels = ['Vehicle status', 'Ignition', 'Device', 'Route', 'Video', 'Camera', 'Audio', 'Command', 'Details'];
-                const isRunning = trip.status === 'running';
-                const actionClass =
-                 j === 0 ? (isRunning ? 'action-green' : 'action-blue') :
-                 j === 1 ? (isRunning ? 'action-green' : '') :
-                 j === 3 ? 'action-link' :
-                 j === 8 ? 'action-blue' : '';
+             {/* CHILD VEHICLE ROWS (Shown when expanded) */}
+             {isExpanded && (
+              <div className="shuttle-children-container">
+               {route.vehicles.map(veh => {
+                const isVehSelected = selectedVehicleIds.includes(veh.id);
+                const isVehFocused = focusedVehicleId === veh.id;
 
                 return (
-                 <IconButton
-                  key={j}
-                  icon={Icon}
-                  label={`${labels[j]}: ${trip.vehicleNumber}`}
-                  className={actionClass}
-                  onClick={(e) => {
-                   e.stopPropagation();
-                   if (j === 8) {
-                    setFocusedShuttleId(trip.id);
-                    setSelectedDetailTripId(trip.id);
-                    setIsVehicleFocused(true);
-                    setIsDetailLayerOpen(true);
-                   }
+                 <div
+                  key={veh.id}
+                  className={`shuttle-vehicle-child-row ${isVehFocused ? 'focused' : ''}`}
+                  onClick={() => {
+                   setFocusedVehicleId(veh.id);
+                   setFocusedShuttleId(route.id);
+                   setSelectedDetailTripId(route.id);
+                   setIsVehicleFocused(true);
                   }}
-                 />
+                 >
+                  <div className="shuttle-child-left">
+                   <input
+                    type="checkbox"
+                    checked={isVehSelected}
+                    onChange={e => {
+                     e.stopPropagation();
+                     toggleVehicleSelection(veh.id);
+                    }}
+                    onClick={e => e.stopPropagation()}
+                    aria-label={`Select ${veh.vehicleNumber}`}
+                   />
+                   <span className={`status-dot ${veh.status === 'running' ? 'orange' : veh.status === 'completed' ? 'green' : 'blue'}`}/>
+                  </div>
+
+                  <div className="shuttle-child-content">
+                   <div className="shuttle-child-meta">
+                    <span className="shuttle-child-veh-num" title={veh.vehicleNumber}>
+                     {veh.vehicleNumber}
+                    </span>
+                    <div className="shuttle-child-sub">
+                     <span className="shuttle-child-driver" title={`Driver: ${veh.driver}`}>
+                      <UserRound size={10}/>
+                      <span>{veh.driver}</span>
+                     </span>
+                     <span className="shuttle-child-gps">
+                      Last GPS {veh.timestamp}
+                     </span>
+                    </div>
+                   </div>
+
+                   <div className="vehicle-actions">
+                    {[BusFront, KeyRound, Smartphone, RouteIcon, Video, Camera, Volume2, Hand, ClipboardList].map((Icon, j) => {
+                     const labels = ['Vehicle status', 'Ignition', 'Device', 'Route', 'Video', 'Camera', 'Audio', 'Command', 'Details'];
+                     const isRunning = veh.status === 'running';
+                     const actionClass =
+                      j === 0 ? (isRunning ? 'action-green' : 'action-blue') :
+                      j === 1 ? (isRunning ? 'action-green' : '') :
+                      j === 3 ? 'action-link' :
+                      j === 8 ? 'action-blue' : '';
+
+                     return (
+                      <IconButton
+                       key={j}
+                       icon={Icon}
+                       label={`${labels[j]}: ${veh.vehicleNumber}`}
+                       className={actionClass}
+                       onClick={(e) => {
+                        e.stopPropagation();
+                        if (j === 8) {
+                         setFocusedVehicleId(veh.id);
+                         setFocusedShuttleId(route.id);
+                         setSelectedDetailTripId(route.id);
+                         setIsVehicleFocused(true);
+                         setIsDetailLayerOpen(true);
+                        }
+                       }}
+                      />
+                     );
+                    })}
+                   </div>
+                  </div>
+                 </div>
                 );
                })}
               </div>
-             </div>
+             )}
             </div>
-           </div>
-          ))}
+           );
+          })}
          </div>
         </>
        ) : (

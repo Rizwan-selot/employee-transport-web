@@ -50,14 +50,51 @@ button,input,select { font:inherit; } button { cursor:pointer; } input[type=chec
 
 /* Compact Shuttle Trip Rows (Exact Object list density & styling) */
 .shuttle-list {flex:1;min-height:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) var(--secondary);}
-.shuttle-trip-item {padding:6px 8px;border-bottom:1px solid var(--muted);display:flex;align-items:flex-start;gap:7px;background:var(--background);transition:background .1s ease;cursor:pointer;}
-.shuttle-trip-item:hover {background:var(--accent);}
-.shuttle-trip-item.focused {background:var(--accent);}
+/* Hierarchical Shuttle Route & Vehicle Tree (Second Reference Layout) */
+.shuttle-route-group {border-bottom:1px solid var(--muted);background:var(--background);}
+.shuttle-route-group.focused {background:#f8fafc;}
 
-.shuttle-trip-left {display:flex;align-items:center;gap:6px;flex-shrink:0;margin-top:1px;}
-.shuttle-trip-left input[type="checkbox"] {flex-shrink:0;margin:0;cursor:pointer;}
+.shuttle-route-parent-row {padding:5px 8px;display:flex;align-items:flex-start;gap:6px;background:var(--background);cursor:pointer;transition:background .1s ease;}
+.shuttle-route-parent-row:hover {background:var(--accent);}
 
-.shuttle-trip-content {flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;}
+.shuttle-parent-left {display:flex;align-items:center;gap:5px;flex-shrink:0;margin-top:2px;}
+.shuttle-chevron-btn {background:transparent;border:none;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;color:#475569;width:14px;height:14px;}
+.shuttle-chevron-btn:hover {color:var(--primary);}
+.shuttle-parent-left input[type="checkbox"] {cursor:pointer;margin:0;}
+
+.shuttle-parent-content {flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+
+.shuttle-vehicle-count-tag {font-size:10.5px;color:#475569;background:#f1f5f9;border:1px solid #e2e8f0;padding:0 4px;border-radius:2px;font-weight:600;white-space:nowrap;}
+.shuttle-selected-ratio-tag {font-size:10px;color:#0284c7;font-weight:600;white-space:nowrap;}
+
+/* Children Container & Vehicle Child Rows */
+.shuttle-children-container {display:flex;flex-direction:column;background:#fafafa;border-top:1px dashed var(--muted);}
+.shuttle-vehicle-child-row {display:flex;align-items:center;gap:7px;padding:4px 8px 4px 26px;border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background .1s ease;position:relative;}
+.shuttle-vehicle-child-row:hover {background:#f1f5f9;}
+.shuttle-vehicle-child-row.focused {background:var(--accent);}
+.shuttle-vehicle-child-row:last-child {border-bottom:none;}
+.shuttle-vehicle-child-row::before {content:'';position:absolute;left:13px;top:0;bottom:0;width:1px;background:#cbd5e1;}
+
+.shuttle-child-left {display:flex;align-items:center;gap:5px;flex-shrink:0;}
+.shuttle-child-left input[type="checkbox"] {cursor:pointer;margin:0;}
+
+.shuttle-child-content {flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.shuttle-child-meta {display:flex;flex-direction:column;min-width:0;gap:1px;}
+.shuttle-child-veh-num {font-size:11.5px;font-weight:700;color:var(--link);cursor:pointer;white-space:nowrap;line-height:1.2;}
+.shuttle-child-veh-num:hover {text-decoration:underline;}
+.shuttle-child-sub {display:inline-flex;align-items:center;gap:6px;font-size:10.5px;color:var(--muted-foreground);white-space:nowrap;line-height:1.2;}
+.shuttle-child-driver {display:inline-flex;align-items:center;gap:2px;}
+.shuttle-child-driver svg {width:10px;height:10px;}
+.shuttle-child-gps {color:#64748b;font-size:10px;}
+
+.shuttle-vehicle-child-row .vehicle-actions {display:inline-flex;align-items:center;gap:2px;margin-left:auto;flex-shrink:0;}
+.shuttle-vehicle-child-row .vehicle-actions .legacy-button {height:23px;width:20px;color:var(--muted-foreground);display:inline-flex;align-items:center;justify-content:center;border-radius:2px;}
+.shuttle-vehicle-child-row .vehicle-actions .legacy-button:hover {background:var(--muted);color:var(--primary);}
+.shuttle-vehicle-child-row .vehicle-actions .legacy-button svg {width:12.5px;height:12.5px;stroke-width:2.4;}
+.shuttle-vehicle-child-row .vehicle-actions .action-green {color:var(--green);}
+.shuttle-vehicle-child-row .vehicle-actions .action-red {color:var(--danger);}
+.shuttle-vehicle-child-row .vehicle-actions .action-blue {color:var(--blue);}
+.shuttle-vehicle-child-row .vehicle-actions .action-link {color:var(--primary);}
 
 .shuttle-line-1 {display:flex;align-items:center;justify-content:space-between;gap:8px;line-height:1.2;}
 .shuttle-route-title {color:var(--link);font-weight:600;font-size:12px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;}
