@@ -55,9 +55,8 @@ button,input,select { font:inherit; } button { cursor:pointer; } input[type=chec
 .shuttle-route-group:last-child {margin-bottom:14px;}
 
 /* Route Parent Row (Height: 52-58px, stronger visual hierarchy) */
-.shuttle-route-parent-row {min-height:54px;padding:8px 10px;display:flex;align-items:flex-start;gap:7px;background:#f8fafc;cursor:pointer;transition:background .12s ease;border-bottom:1px solid #e2e8f0;}
-.shuttle-route-parent-row:hover {background:#f1f5f9;}
-.shuttle-route-group.focused > .shuttle-route-parent-row {background:#eff6ff;border-bottom-color:#bfdbfe;}
+.shuttle-route-parent-row {min-height:54px;padding:8px 10px;display:flex;align-items:flex-start;gap:7px;background:#ffffff;cursor:pointer;transition:background .12s ease;border-bottom:1px solid #e2e8f0;}
+.shuttle-route-parent-row:hover {background:#f8fafc;}
 
 .shuttle-parent-left {display:flex;align-items:center;gap:6px;flex-shrink:0;margin-top:2px;}
 .shuttle-chevron-btn {background:transparent;border:none;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;color:#475569;width:14px;height:14px;}
@@ -76,8 +75,6 @@ button,input,select { font:inherit; } button { cursor:pointer; } input[type=chec
 .shuttle-vehicle-child-row {min-height:40px;display:flex;align-items:center;gap:8px;padding:5px 10px 5px 34px;border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background .12s ease;position:relative;background:#ffffff;}
 .shuttle-vehicle-child-row:last-child {border-bottom:none;}
 .shuttle-vehicle-child-row:hover {background:#f8fafc;}
-.shuttle-vehicle-child-row.focused {background:#e0f2fe;}
-.shuttle-vehicle-child-row.is-selected {background:#f0f9ff;}
 
 /* Tree Connector Lines: Thin light-grey trunk and branch */
 .shuttle-vehicle-child-row::before {content:'';position:absolute;left:17px;top:0;bottom:0;width:1px;background:#cbd5e1;}
