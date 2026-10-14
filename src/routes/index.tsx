@@ -1662,7 +1662,7 @@ function LiveTracking() {
 
        {/* Detail Scrollable Body */}
        <div className="shuttle-detail-body">
-        {/* 4. Trip Details (Collapsible) */}
+        {/* 4. Combined Trip Details, Driver & Vehicle Card */}
         <div className="detail-collapsible-box">
          <div
           className="detail-collapsible-header"
@@ -1707,58 +1707,58 @@ function LiveTracking() {
            </div>
           </div>
          )}
-        </div>
 
-        {/* 5. Driver Row */}
-        <div className="detail-info-strip">
-         <div className="detail-strip-avatar">
-          <UserRound size={14} />
-         </div>
-         <div className="detail-strip-main">
-          <div className="detail-strip-name">
-           {shuttleDetailData.driver?.name || <span className="detail-not-assigned">Not assigned</span>}
+         {/* Driver Row with divider */}
+         <div className="detail-info-strip">
+          <div className="detail-strip-avatar">
+           <UserRound size={14} />
           </div>
-         </div>
-         {shuttleDetailData.driver?.name && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-           <span className="detail-rating-pill">
-            <Star size={10} fill="#ca8a04" color="#ca8a04" />
-            <span>{shuttleDetailData.driver.rating}</span>
-           </span>
-           <button
-            type="button"
-            className="detail-phone-btn"
-            onClick={() => alert(`Calling driver ${shuttleDetailData.driver.name} at ${shuttleDetailData.driver.phone}...`)}
-            title={`Call ${shuttleDetailData.driver.phone}`}
-           >
-            <Phone size={11} />
-            <span>{shuttleDetailData.driver.phone}</span>
-           </button>
+          <div className="detail-strip-main">
+           <div className="detail-strip-name">
+            {shuttleDetailData.driver?.name || <span className="detail-not-assigned">Not assigned</span>}
+           </div>
           </div>
-         )}
-        </div>
-
-        {/* 6. Vehicle Row */}
-        <div className="detail-info-strip">
-         <div className="detail-strip-icon-box">
-          <BusFront size={14} />
-         </div>
-         <div className="detail-strip-main">
-          <div className="detail-vehicle-header">
-           <span className="detail-strip-name">
-            {shuttleDetailData.vehicle?.number || <span className="detail-not-assigned">Not assigned</span>}
-           </span>
-           {shuttleDetailData.vehicle?.number && (
-            <span className="detail-strip-sub">
-             Fleet {shuttleDetailData.vehicle.fleet} | {shuttleDetailData.vehicle.capacity} | {shuttleDetailData.vehicle.type}
+          {shuttleDetailData.driver?.name && (
+           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span className="detail-rating-pill">
+             <Star size={10} fill="#ca8a04" color="#ca8a04" />
+             <span>{shuttleDetailData.driver.rating}</span>
             </span>
-           )}
-          </div>
-          {shuttleDetailData.vehicle?.previousNote && (
-           <div className="detail-strip-note">
-            {shuttleDetailData.vehicle.previousNote}
+            <button
+             type="button"
+             className="detail-phone-btn"
+             onClick={() => alert(`Calling driver ${shuttleDetailData.driver.name} at ${shuttleDetailData.driver.phone}...`)}
+             title={`Call ${shuttleDetailData.driver.phone}`}
+            >
+             <Phone size={11} />
+             <span>{shuttleDetailData.driver.phone}</span>
+            </button>
            </div>
           )}
+         </div>
+
+         {/* Vehicle Row with divider */}
+         <div className="detail-info-strip">
+          <div className="detail-strip-icon-box">
+           <BusFront size={14} />
+          </div>
+          <div className="detail-strip-main">
+           <div className="detail-vehicle-header">
+            <span className="detail-strip-name">
+             {shuttleDetailData.vehicle?.number || <span className="detail-not-assigned">Not assigned</span>}
+            </span>
+            {shuttleDetailData.vehicle?.number && (
+             <span className="detail-strip-sub">
+              Fleet {shuttleDetailData.vehicle.fleet} | {shuttleDetailData.vehicle.capacity} | {shuttleDetailData.vehicle.type}
+             </span>
+            )}
+           </div>
+           {shuttleDetailData.vehicle?.previousNote && (
+            <div className="detail-strip-note">
+             {shuttleDetailData.vehicle.previousNote}
+            </div>
+           )}
+          </div>
          </div>
         </div>
 
