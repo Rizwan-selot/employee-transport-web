@@ -1699,26 +1699,27 @@ function LiveTracking() {
           <UserRound size={14} />
          </div>
          <div className="detail-strip-main">
-          <div className="detail-strip-name">{shuttleDetailData.driver.name}</div>
-          <div className="detail-strip-sub">
-           Driver ID: DRV-8821 • Assigned
+          <div className="detail-strip-name">
+           {shuttleDetailData.driver?.name || <span className="detail-not-assigned">Not assigned</span>}
           </div>
          </div>
-         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span className="detail-rating-pill">
-           <Star size={10} fill="#ca8a04" color="#ca8a04" />
-           <span>{shuttleDetailData.driver.rating}</span>
-          </span>
-          <button
-           type="button"
-           className="detail-phone-btn"
-           onClick={() => alert(`Calling driver ${shuttleDetailData.driver.name} at ${shuttleDetailData.driver.phone}...`)}
-           title={`Call ${shuttleDetailData.driver.phone}`}
-          >
-           <Phone size={11} />
-           <span>{shuttleDetailData.driver.phone}</span>
-          </button>
-         </div>
+         {shuttleDetailData.driver?.name && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+           <span className="detail-rating-pill">
+            <Star size={10} fill="#ca8a04" color="#ca8a04" />
+            <span>{shuttleDetailData.driver.rating}</span>
+           </span>
+           <button
+            type="button"
+            className="detail-phone-btn"
+            onClick={() => alert(`Calling driver ${shuttleDetailData.driver.name} at ${shuttleDetailData.driver.phone}...`)}
+            title={`Call ${shuttleDetailData.driver.phone}`}
+           >
+            <Phone size={11} />
+            <span>{shuttleDetailData.driver.phone}</span>
+           </button>
+          </div>
+         )}
         </div>
 
         {/* 6. Vehicle Row */}
@@ -1727,26 +1728,26 @@ function LiveTracking() {
           <BusFront size={14} />
          </div>
          <div className="detail-strip-main">
-          <div className="detail-strip-name">{shuttleDetailData.vehicle.number}</div>
-          <div className="detail-strip-sub">
-           Fleet {shuttleDetailData.vehicle.fleet} | {shuttleDetailData.vehicle.capacity} | {shuttleDetailData.vehicle.type}
+          <div className="detail-strip-name">
+           {shuttleDetailData.vehicle?.number || <span className="detail-not-assigned">Not assigned</span>}
           </div>
-          {shuttleDetailData.vehicle.previousNote && (
+          {shuttleDetailData.vehicle?.number && (
+           <div className="detail-strip-sub">
+            Fleet {shuttleDetailData.vehicle.fleet} | {shuttleDetailData.vehicle.capacity} | {shuttleDetailData.vehicle.type}
+           </div>
+          )}
+          {shuttleDetailData.vehicle?.previousNote && (
            <div className="detail-strip-note">
             {shuttleDetailData.vehicle.previousNote}
            </div>
           )}
          </div>
-         <span className="status-chip completed" style={{ fontSize: '11px', padding: '1px 6px' }}>
-          Live GPS
-         </span>
         </div>
 
         {/* 7. Stop Timeline */}
         <div className="shuttle-stop-timeline">
          <div className="timeline-section-title">
           <span>Stop Timeline ({shuttleDetailData.stops.length} Stops)</span>
-          <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 500 }}>Auto-updating</span>
          </div>
 
          {/* Stop 1: Current / Next Stop (Highlighted) */}
