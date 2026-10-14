@@ -1659,6 +1659,7 @@ function LiveTracking() {
                    setFocusedShuttleId(route.id);
                    setSelectedDetailTripId(route.id);
                    setIsVehicleFocused(true);
+                   setIsDetailLayerOpen(true);
                   }}
                  >
                   <div className="shuttle-child-left">
@@ -1755,7 +1756,7 @@ function LiveTracking() {
         >
          <ArrowLeft size={14} />
         </button>
-        <span className="detail-trip-title">{shuttleDetailData.tripId}</span>
+        <span className="detail-trip-title">{activeShuttleTrip?.tripId || shuttleDetailData.tripId}</span>
         <span className={`detail-badge-direction ${shuttleDetailData.direction.toLowerCase()}`}>
          [{shuttleDetailData.direction}]
         </span>
@@ -1870,7 +1871,7 @@ function LiveTracking() {
           <div className="detail-grid-2col">
            <div className="detail-kv-item">
             <span className="detail-kv-label">Shift</span>
-            <span className="detail-kv-value">{shuttleDetailData.shift}</span>
+            <span className="detail-kv-value">{activeShuttleTrip?.shiftChip || shuttleDetailData.shift}</span>
            </div>
            <div className="detail-kv-item">
             <span className="detail-kv-label">Status</span>
@@ -1886,7 +1887,7 @@ function LiveTracking() {
            </div>
            <div className="detail-kv-item" style={{ gridColumn: 'span 2' }}>
             <span className="detail-kv-label">Vendor</span>
-            <span className="detail-kv-value">{shuttleDetailData.vendor}</span>
+            <span className="detail-kv-value">{activeShuttleTrip?.vendor || shuttleDetailData.vendor}</span>
            </div>
           </div>
          )}
@@ -1898,7 +1899,7 @@ function LiveTracking() {
           </div>
           <div className="detail-strip-main">
            <div className="detail-strip-name">
-            {shuttleDetailData.driver?.name || <span className="detail-not-assigned">Not assigned</span>}
+            {activeVehicle?.driver || shuttleDetailData.driver?.name || <span className="detail-not-assigned">Not assigned</span>}
            </div>
           </div>
           {shuttleDetailData.driver?.name && (
@@ -1928,7 +1929,7 @@ function LiveTracking() {
           <div className="detail-strip-main">
            <div className="detail-vehicle-header">
             <span className="detail-strip-name">
-             {shuttleDetailData.vehicle?.number || <span className="detail-not-assigned">Not assigned</span>}
+             {activeVehicle?.vehicleNumber || shuttleDetailData.vehicle?.number || <span className="detail-not-assigned">Not assigned</span>}
             </span>
             {shuttleDetailData.vehicle?.number && (
              <span className="detail-strip-sub">
