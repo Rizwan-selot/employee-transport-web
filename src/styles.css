@@ -81,6 +81,18 @@ button,input,select { font:inherit; } button { cursor:pointer; } input[type=chec
 .shuttle-delay-late {color:var(--danger);font-weight:600;}
 .shuttle-delay-ontime {color:var(--green);font-weight:600;}
 
+.shuttle-line-3 {display:flex;align-items:center;justify-content:space-between;gap:6px;padding-left:0;font-size:11px;color:var(--muted-foreground);line-height:1.2;margin-top:1px;}
+.shuttle-driver-info {display:inline-flex;align-items:center;gap:3px;color:var(--muted-foreground);font-size:11px;white-space:nowrap;}
+.shuttle-driver-info svg {width:11px;height:11px;}
+.shuttle-line-3 .vehicle-actions {display:inline-flex;align-items:center;gap:2px;margin-left:auto;flex:none;}
+.shuttle-line-3 .vehicle-actions .legacy-button {height:24px;width:21px;color:var(--muted-foreground);display:inline-flex;align-items:center;justify-content:center;border-radius:2px;}
+.shuttle-line-3 .vehicle-actions .legacy-button:hover {background:var(--muted);color:var(--primary);}
+.shuttle-line-3 .vehicle-actions .legacy-button svg {width:12.5px;height:12.5px;stroke-width:2.4;}
+.shuttle-line-3 .vehicle-actions .action-green {color:var(--green);}
+.shuttle-line-3 .vehicle-actions .action-red {color:var(--danger);}
+.shuttle-line-3 .vehicle-actions .action-blue {color:var(--blue);}
+.shuttle-line-3 .vehicle-actions .action-link {color:var(--primary);}
+
 .status-dot.orange {background:var(--amber);}
 .status-dot.green {background:var(--green);}
 .status-dot.blue {background:var(--blue);}

@@ -1092,7 +1092,7 @@ function TripsLiveMap({
  );
 }
 
-function IconButton({icon:Icon,label,className='',onClick}:{icon:LucideIcon;label:string;className?:string;onClick?:()=>void}) {return <Button variant="legacy" className={className} title={label} aria-label={label} onClick={onClick}><Icon /></Button>;}
+function IconButton({icon:Icon,label,className='',onClick}:{icon:LucideIcon;label:string;className?:string;onClick?:(e: any)=>void}) {return <Button variant="legacy" className={className} title={label} aria-label={label} onClick={onClick}><Icon /></Button>;}
 function InfoCard({title,rows,action,icon:Icon}:{title:string;rows:{label:string;value:string;stack?:boolean;off?:boolean}[];action:string;icon:LucideIcon}) { const [activated,setActivated]=useState(false); return <section className="info-card"><h2><Icon/>{title}</h2><div className="info-body">{rows.map(row=><div className={`info-row ${row.stack?'stack':''}`} key={row.label}><span className="info-label">{row.label}</span><span className={`info-value ${row.off?'off-road':''}`}>{row.value}</span></div>)}</div><Button variant="legacy" className="card-action" onClick={()=>{setActivated(!activated);if(action==='Share Location' && navigator.clipboard) void navigator.clipboard.writeText('35.43, -97.48');}}>{action==='Share Location'?<Share2/>:<MapPinned/>}{activated?(action==='Share Location'?'Location Copied':'Navigating'):action}</Button></section>;}
 
 function LiveTracking() {
@@ -1505,6 +1505,43 @@ function LiveTracking() {
                <span className={trip.isLate ? 'shuttle-delay-late' : 'shuttle-delay-ontime'}>
                 {trip.delayText.replace(/[()]/g, '')}
                </span>
+              </div>
+             </div>
+
+             {/* ROW 3: Driver / secondary info | Existing Trackzee vehicle action icons */}
+             <div className="shuttle-line-3">
+              <span className="shuttle-driver-info" title={`Driver: ${trip.driver}`}>
+               <UserRound size={11}/>
+               <span>{trip.driver}</span>
+              </span>
+              <div className="vehicle-actions">
+               {[BusFront, KeyRound, Smartphone, RouteIcon, Video, Camera, Volume2, Hand, ClipboardList].map((Icon, j) => {
+                const labels = ['Vehicle status', 'Ignition', 'Device', 'Route', 'Video', 'Camera', 'Audio', 'Command', 'Details'];
+                const isRunning = trip.status === 'running';
+                const actionClass =
+                 j === 0 ? (isRunning ? 'action-green' : 'action-blue') :
+                 j === 1 ? (isRunning ? 'action-green' : '') :
+                 j === 3 ? 'action-link' :
+                 j === 8 ? 'action-blue' : '';
+
+                return (
+                 <IconButton
+                  key={j}
+                  icon={Icon}
+                  label={`${labels[j]}: ${trip.vehicleNumber}`}
+                  className={actionClass}
+                  onClick={(e) => {
+                   e.stopPropagation();
+                   if (j === 8) {
+                    setFocusedShuttleId(trip.id);
+                    setSelectedDetailTripId(trip.id);
+                    setIsVehicleFocused(true);
+                    setIsDetailLayerOpen(true);
+                   }
+                  }}
+                 />
+                );
+               })}
               </div>
              </div>
             </div>
