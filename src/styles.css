@@ -50,47 +50,58 @@ button,input,select { font:inherit; } button { cursor:pointer; } input[type=chec
 
 /* Compact Shuttle Trip Rows (Exact Object list density & styling) */
 .shuttle-list {flex:1;min-height:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--border) var(--secondary);}
-/* Hierarchical Shuttle Route & Vehicle Tree (Second Reference Layout) */
-.shuttle-route-group {border-bottom:1px solid var(--muted);background:var(--background);}
-.shuttle-route-group.focused {background:#f8fafc;}
+/* Hierarchical Shuttle Route & Vehicle Tree (Refined Spacing & Hierarchy) */
+.shuttle-route-group {margin-bottom:11px;border-bottom:1px solid #cbd5e1;background:var(--background);}
+.shuttle-route-group:last-child {margin-bottom:14px;}
 
-.shuttle-route-parent-row {padding:5px 8px;display:flex;align-items:flex-start;gap:6px;background:var(--background);cursor:pointer;transition:background .1s ease;}
-.shuttle-route-parent-row:hover {background:var(--accent);}
+/* Route Parent Row (Height: 52-58px, stronger visual hierarchy) */
+.shuttle-route-parent-row {min-height:54px;padding:8px 10px;display:flex;align-items:flex-start;gap:7px;background:#f8fafc;cursor:pointer;transition:background .12s ease;border-bottom:1px solid #e2e8f0;}
+.shuttle-route-parent-row:hover {background:#f1f5f9;}
+.shuttle-route-group.focused > .shuttle-route-parent-row {background:#eff6ff;border-bottom-color:#bfdbfe;}
 
-.shuttle-parent-left {display:flex;align-items:center;gap:5px;flex-shrink:0;margin-top:2px;}
+.shuttle-parent-left {display:flex;align-items:center;gap:6px;flex-shrink:0;margin-top:2px;}
 .shuttle-chevron-btn {background:transparent;border:none;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;color:#475569;width:14px;height:14px;}
 .shuttle-chevron-btn:hover {color:var(--primary);}
 .shuttle-parent-left input[type="checkbox"] {cursor:pointer;margin:0;}
 
-.shuttle-parent-content {flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+.shuttle-parent-content {flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;}
 
-.shuttle-vehicle-count-tag {font-size:10.5px;color:#475569;background:#f1f5f9;border:1px solid #e2e8f0;padding:0 4px;border-radius:2px;font-weight:600;white-space:nowrap;}
+.shuttle-vehicle-count-tag {font-size:10.5px;color:#475569;background:#f1f5f9;border:1px solid #cbd5e1;padding:1px 5px;border-radius:2px;font-weight:600;white-space:nowrap;}
 .shuttle-selected-ratio-tag {font-size:10px;color:#0284c7;font-weight:600;white-space:nowrap;}
 
-/* Children Container & Vehicle Child Rows */
-.shuttle-children-container {display:flex;flex-direction:column;background:#fafafa;border-top:1px dashed var(--muted);}
-.shuttle-vehicle-child-row {display:flex;align-items:center;gap:7px;padding:4px 8px 4px 26px;border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background .1s ease;position:relative;}
-.shuttle-vehicle-child-row:hover {background:#f1f5f9;}
-.shuttle-vehicle-child-row.focused {background:var(--accent);}
-.shuttle-vehicle-child-row:last-child {border-bottom:none;}
-.shuttle-vehicle-child-row::before {content:'';position:absolute;left:13px;top:0;bottom:0;width:1px;background:#cbd5e1;}
+/* Children Container: 6-8px space after Route metadata before first vehicle */
+.shuttle-children-container {display:flex;flex-direction:column;background:#ffffff;padding:7px 0 6px 0;position:relative;}
 
-.shuttle-child-left {display:flex;align-items:center;gap:5px;flex-shrink:0;}
+/* Child Vehicle Row (Height: 38-44px, 20-28px indentation with tree connector line) */
+.shuttle-vehicle-child-row {min-height:40px;display:flex;align-items:center;gap:8px;padding:5px 10px 5px 34px;border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background .12s ease;position:relative;background:#ffffff;}
+.shuttle-vehicle-child-row:last-child {border-bottom:none;}
+.shuttle-vehicle-child-row:hover {background:#f8fafc;}
+.shuttle-vehicle-child-row.focused {background:#e0f2fe;}
+.shuttle-vehicle-child-row.is-selected {background:#f0f9ff;}
+
+/* Tree Connector Lines: Thin light-grey trunk and branch */
+.shuttle-vehicle-child-row::before {content:'';position:absolute;left:17px;top:0;bottom:0;width:1px;background:#cbd5e1;}
+.shuttle-vehicle-child-row:first-child::before {top:-7px;}
+.shuttle-vehicle-child-row:last-child::before {bottom:50%;}
+.shuttle-vehicle-child-row::after {content:'';position:absolute;left:17px;top:50%;width:11px;height:1px;background:#cbd5e1;}
+
+.shuttle-child-left {display:flex;align-items:center;gap:6px;flex-shrink:0;}
 .shuttle-child-left input[type="checkbox"] {cursor:pointer;margin:0;}
 
-.shuttle-child-content {flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:8px;}
-.shuttle-child-meta {display:flex;flex-direction:column;min-width:0;gap:1px;}
-.shuttle-child-veh-num {font-size:11.5px;font-weight:700;color:var(--link);cursor:pointer;white-space:nowrap;line-height:1.2;}
-.shuttle-child-veh-num:hover {text-decoration:underline;}
-.shuttle-child-sub {display:inline-flex;align-items:center;gap:6px;font-size:10.5px;color:var(--muted-foreground);white-space:nowrap;line-height:1.2;}
-.shuttle-child-driver {display:inline-flex;align-items:center;gap:2px;}
+.shuttle-child-content {flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.shuttle-child-meta {display:flex;flex-direction:column;min-width:0;gap:2px;}
+.shuttle-child-veh-num {font-size:11.5px;font-weight:700;color:#0f172a;cursor:pointer;white-space:nowrap;line-height:1.2;}
+.shuttle-child-veh-num:hover {color:var(--link);text-decoration:underline;}
+.shuttle-child-sub {display:inline-flex;align-items:center;gap:8px;font-size:10.5px;color:#64748b;white-space:nowrap;line-height:1.2;}
+.shuttle-child-driver {display:inline-flex;align-items:center;gap:3px;color:#475569;font-weight:500;}
 .shuttle-child-driver svg {width:10px;height:10px;}
 .shuttle-child-gps {color:#64748b;font-size:10px;}
 
-.shuttle-vehicle-child-row .vehicle-actions {display:inline-flex;align-items:center;gap:2px;margin-left:auto;flex-shrink:0;}
-.shuttle-vehicle-child-row .vehicle-actions .legacy-button {height:23px;width:20px;color:var(--muted-foreground);display:inline-flex;align-items:center;justify-content:center;border-radius:2px;}
-.shuttle-vehicle-child-row .vehicle-actions .legacy-button:hover {background:var(--muted);color:var(--primary);}
-.shuttle-vehicle-child-row .vehicle-actions .legacy-button svg {width:12.5px;height:12.5px;stroke-width:2.4;}
+/* Vehicle Action Icons (6-8px gap, centered vertically) */
+.shuttle-vehicle-child-row .vehicle-actions {display:inline-flex;align-items:center;gap:6px;margin-left:auto;padding-left:10px;flex-shrink:0;}
+.shuttle-vehicle-child-row .vehicle-actions .legacy-button {height:24px;width:20px;color:#64748b;display:inline-flex;align-items:center;justify-content:center;border-radius:2px;}
+.shuttle-vehicle-child-row .vehicle-actions .legacy-button:hover {background:#f1f5f9;color:var(--primary);}
+.shuttle-vehicle-child-row .vehicle-actions .legacy-button svg {width:12.5px;height:12.5px;stroke-width:2.3;}
 .shuttle-vehicle-child-row .vehicle-actions .action-green {color:var(--green);}
 .shuttle-vehicle-child-row .vehicle-actions .action-red {color:var(--danger);}
 .shuttle-vehicle-child-row .vehicle-actions .action-blue {color:var(--blue);}

@@ -1653,7 +1653,7 @@ function LiveTracking() {
                 return (
                  <div
                   key={veh.id}
-                  className={`shuttle-vehicle-child-row ${isVehFocused ? 'focused' : ''}`}
+                  className={`shuttle-vehicle-child-row ${isVehFocused ? 'focused' : ''} ${isVehSelected ? 'is-selected' : ''}`}
                   onClick={() => {
                    setFocusedVehicleId(veh.id);
                    setFocusedShuttleId(route.id);
