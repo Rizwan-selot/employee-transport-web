@@ -1431,12 +1431,11 @@ function LiveTracking() {
          <div className="group-header" style={{ justifyContent: 'space-between', padding: '0 8px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
            <input type="checkbox" aria-label="Select all shuttle trips" checked={selectedShuttles.length === shuttleTrips.length} onChange={toggleAllShuttles}/>
-           <span style={{ fontSize: '10px', fontWeight: 600 }}>Select All</span>
-           <span style={{ fontSize: '9.5px', color: 'var(--muted-foreground)' }}>{selectedShuttles.length} selected</span>
+           <span style={{ fontSize: '11px', fontWeight: 600 }}>Select All</span>
+           <span style={{ fontSize: '11px', color: 'var(--muted-foreground)' }}>{selectedShuttles.length} selected</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '9.5px', color: 'var(--muted-foreground)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', color: 'var(--muted-foreground)' }}>
            <span>Showing {filteredShuttles.length} of 4 trips</span>
-           <span>Updated: 10:01:53</span>
           </div>
          </div>
 
@@ -1467,13 +1466,18 @@ function LiveTracking() {
             </div>
 
             <div className="shuttle-trip-content">
-              <div className="shuttle-line-1">
-               <span className="shuttle-route-title" title={trip.routeName}>{trip.routeName}</span>
+             {/* ROW 1: [checkbox] [status dot] Route Name | Vehicle Number Shift */}
+             <div className="shuttle-line-1">
+              <span className="shuttle-route-title" title={trip.routeName}>{trip.routeName}</span>
+              <div className="shuttle-line-1-right">
                <span className="shuttle-vehicle-code">{trip.vehicleNumber}</span>
                <span className={`shuttle-shift-pill ${trip.shiftType === 'IN' ? 'in' : 'out'}`}>{trip.shiftChip}</span>
               </div>
+             </div>
 
-              <div className="shuttle-line-2">
+             {/* ROW 2: Trip ID | Occupancy | Alert | ETA | Delay */}
+             <div className="shuttle-line-2">
+              <div className="shuttle-line-2-left">
                <span
                 className="shuttle-trip-link"
                 onClick={e => {
@@ -1486,7 +1490,7 @@ function LiveTracking() {
                >
                 {trip.tripId}
                </span>
-               <span className="shuttle-occupancy-info">
+               <span className="shuttle-occupancy-info" title="Occupancy: Boarded(Scheduled)">
                 <Users size={11}/>
                 <span>{trip.occupancy}</span>
                </span>
@@ -1495,41 +1499,16 @@ function LiveTracking() {
                  <Flag size={10} fill="currentColor"/>
                 </span>
                )}
-               <div className="shuttle-line-2-right">
-                <span className="shuttle-eta-val">{trip.eta}</span>
-                <span className={trip.isLate ? 'shuttle-delay-late' : 'shuttle-delay-ontime'}>{trip.delayText}</span>
-               </div>
               </div>
-
-              <div className="shuttle-line-3">
-               <span className="shuttle-driver-info">
-                <UserRound size={11}/>
-                <span>{trip.driver}</span>
+              <div className="shuttle-line-2-right">
+               <span className="shuttle-eta-val">{trip.eta}</span>
+               <span className={trip.isLate ? 'shuttle-delay-late' : 'shuttle-delay-ontime'}>
+                {trip.delayText.replace(/[()]/g, '')}
                </span>
-               <span className="shuttle-time-info">{trip.timestamp}</span>
-               <div className="shuttle-action-icons">
-                <IconButton icon={BusFront} label="Vehicle status" className={trip.status === 'running' ? 'action-green' : 'action-blue'}/>
-                <IconButton icon={KeyRound} label="Ignition" className={trip.status === 'running' ? 'action-green' : ''}/>
-                <IconButton icon={Smartphone} label="Device"/>
-                <IconButton icon={RouteIcon} label="Route tracking" className="action-link"/>
-                <IconButton icon={Camera} label="Camera"/>
-                <IconButton icon={Volume2} label="Audio"/>
-                <IconButton icon={Hand} label="Send Command"/>
-                <IconButton
-                 icon={ClipboardList}
-                 label="Details"
-                 className="action-blue"
-                 onClick={() => {
-                  setFocusedShuttleId(trip.id);
-                  setSelectedDetailTripId(trip.id);
-                  setIsVehicleFocused(true);
-                  setIsDetailLayerOpen(true);
-                 }}
-                />
-               </div>
               </div>
              </div>
             </div>
+           </div>
           ))}
          </div>
         </>
