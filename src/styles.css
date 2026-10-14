@@ -1498,23 +1498,11 @@ button,input,select { font:inherit; } button { cursor:pointer; } input[type=chec
   outline-offset: -1px;
 }
 
-.detail-summary-top {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  line-height: 1;
-  margin-bottom: 3px;
-}
-.detail-summary-top svg {
-  width: 12px;
-  height: 12px;
-  stroke-width: 2.3;
-}
 .detail-summary-count {
   font-size: 13px;
   font-weight: 700;
-  line-height: 1;
+  line-height: 1.1;
+  margin-bottom: 3px;
 }
 .detail-summary-label {
   font-size: 11px;

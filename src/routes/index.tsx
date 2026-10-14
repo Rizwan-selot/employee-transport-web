@@ -1609,31 +1609,25 @@ function LiveTracking() {
 
         <div id="shuttle-summary-carousel" className="detail-summary-carousel">
          {[
-          { label: 'Total Employees', count: shuttleDetailData.summaryCounters.totalEmployees, key: 'total', colorClass: 'total', icon: Grid3X3 },
-          { label: 'Boarded', count: shuttleDetailData.summaryCounters.boarded, key: 'boarded', colorClass: 'boarded', icon: Check },
-          { label: 'Not Boarded', count: shuttleDetailData.summaryCounters.notBoarded, key: 'not_boarded', colorClass: 'not_boarded', icon: X },
-          { label: 'Pending Pickup', count: shuttleDetailData.summaryCounters.pendingPickup, key: 'pending', colorClass: 'pending', icon: Clock },
-          { label: 'Women', count: shuttleDetailData.summaryCounters.women, key: 'women', colorClass: 'women', icon: UserRound },
-          { label: 'No-Show', count: shuttleDetailData.summaryCounters.noShow, key: 'noshow', colorClass: 'noshow', icon: X },
-          { label: 'Cancelled', count: shuttleDetailData.summaryCounters.cancelled, key: 'cancelled', colorClass: 'cancelled', icon: Minus },
-          { label: 'Ad-hoc', count: shuttleDetailData.summaryCounters.adHoc, key: 'adhoc', colorClass: 'adhoc', icon: Plus },
-         ].map(chip => {
-          const ChipIcon = chip.icon;
-          return (
-           <div
-            key={chip.key}
-            className={`detail-summary-chip ${chip.colorClass} ${activeSummaryFilter === chip.key ? 'is-active' : ''}`}
-            onClick={() => setActiveSummaryFilter(activeSummaryFilter === chip.key ? null : chip.key)}
-            title={`Filter: ${chip.label}`}
-           >
-            <div className="detail-summary-top">
-             <ChipIcon size={12}/>
-             <span className="detail-summary-count">{chip.count}</span>
-            </div>
-            <span className="detail-summary-label">{chip.label}</span>
-           </div>
-          );
-         })}
+          { label: 'Total Employees', count: shuttleDetailData.summaryCounters.totalEmployees, key: 'total', colorClass: 'total' },
+          { label: 'Boarded', count: shuttleDetailData.summaryCounters.boarded, key: 'boarded', colorClass: 'boarded' },
+          { label: 'Not Boarded', count: shuttleDetailData.summaryCounters.notBoarded, key: 'not_boarded', colorClass: 'not_boarded' },
+          { label: 'Pending Pickup', count: shuttleDetailData.summaryCounters.pendingPickup, key: 'pending', colorClass: 'pending' },
+          { label: 'Women', count: shuttleDetailData.summaryCounters.women, key: 'women', colorClass: 'women' },
+          { label: 'No-Show', count: shuttleDetailData.summaryCounters.noShow, key: 'noshow', colorClass: 'noshow' },
+          { label: 'Cancelled', count: shuttleDetailData.summaryCounters.cancelled, key: 'cancelled', colorClass: 'cancelled' },
+          { label: 'Ad-hoc', count: shuttleDetailData.summaryCounters.adHoc, key: 'adhoc', colorClass: 'adhoc' },
+         ].map(chip => (
+          <div
+           key={chip.key}
+           className={`detail-summary-chip ${chip.colorClass} ${activeSummaryFilter === chip.key ? 'is-active' : ''}`}
+           onClick={() => setActiveSummaryFilter(activeSummaryFilter === chip.key ? null : chip.key)}
+           title={`Filter: ${chip.label}`}
+          >
+           <span className="detail-summary-count">{chip.count}</span>
+           <span className="detail-summary-label">{chip.label}</span>
+          </div>
+         ))}
         </div>
 
         <button
