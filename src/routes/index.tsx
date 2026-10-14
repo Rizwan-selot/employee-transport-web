@@ -1608,14 +1608,6 @@ function LiveTracking() {
                    <Flag size={10} fill="currentColor"/>
                   </span>
                  )}
-                 <span className="shuttle-vehicle-count-tag">
-                  {route.vehicles.length} Vehicles
-                 </span>
-                 {isSomeVehiclesSelected && (
-                  <span className="shuttle-selected-ratio-tag">
-                   {selectedCount}/{route.vehicles.length} selected
-                  </span>
-                 )}
                 </div>
                 <div className="shuttle-line-2-right">
                  <span className="shuttle-eta-val">{route.eta}</span>
