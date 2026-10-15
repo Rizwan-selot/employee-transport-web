@@ -1147,6 +1147,15 @@ function IndeterminateCheckbox({
  );
 }
 
+function getStopDotClass(status: string, isLate?: boolean, isCurrent?: boolean): string {
+  if (isCurrent || status === 'current') return 'current';
+  if (status === 'reached_ontime') return 'ontime';
+  if (status === 'reached_late') return 'late';
+  if (status.startsWith('reached')) return isLate ? 'late' : 'ontime';
+  if (status === 'skipped') return 'skipped';
+  return 'pending';
+}
+
 function LiveTracking() {
  const [activeTab, setActiveTab] = useState<'trips' | 'shuttle' | 'object'>('shuttle');
  const [selectedTripId, setSelectedTripId] = useState<string>('emp-11');
@@ -1959,19 +1968,8 @@ function LiveTracking() {
                );
               }}
              >
-              <span
-               className={`stop-badge-num ${
-                isCurrent
-                 ? ''
-                 : stop.status === 'reached_ontime' || stop.status === 'reached_late'
-                 ? 'reached'
-                 : stop.status === 'skipped'
-                 ? 'skipped'
-                 : 'pending'
-               }`}
-              >
-               {stop.num}
-              </span>
+              <span className={`stop-status-dot ${getStopDotClass(stop.status, stop.isLate, isCurrent)}`} />
+              <span className="stop-seq-num">{stop.num}</span>
               <span className="stop-title-text" title={stop.name}>{stop.name}</span>
               <span className="stop-employees-badge">
                <Users size={10} style={{ display: 'inline', marginRight: 3 }} />

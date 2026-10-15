@@ -1909,17 +1909,49 @@ button,input,select { font:inherit; } button { cursor:pointer; } input[type=chec
   font-weight: 700;
   cursor: pointer;
 }
-.stop-badge-num {
-  background: #2563eb;
-  color: #fff;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 1px 5px;
-  border-radius: 2px;
+/* Stop Status Dot & Sequence Number (Trackzee Enterprise Style) */
+.stop-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
 }
-.stop-badge-num.reached { background: #16a34a; }
-.stop-badge-num.pending { background: #94a3b8; }
-.stop-badge-num.skipped { background: #64748b; }
+.stop-status-dot.ontime {
+  background: #16a34a;
+}
+.stop-status-dot.late {
+  background: #ea580c;
+}
+.stop-status-dot.pending {
+  background: #94a3b8;
+}
+.stop-status-dot.skipped {
+  background: #64748b;
+}
+.stop-status-dot.current {
+  background: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+}
+
+.stop-seq-num {
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.stop-skipped-tag {
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  padding: 0 4px;
+  border-radius: 2px;
+  line-height: 1.2;
+}
 .stop-title-text {
   flex: 1;
   color: #0f172a;
@@ -2050,19 +2082,17 @@ button,input,select { font:inherit; } button { cursor:pointer; } input[type=chec
 }
 .timeline-stops-unified .timeline-stop-item {
   border-bottom: 1px solid #e2e8f0;
-  padding: 6px 8px;
+  border-left: 3px solid transparent;
+  padding: 6px 8px 6px 6px;
   background: #ffffff;
-  transition: background 0.1s ease;
+  transition: background 0.1s ease, border-left-color 0.1s ease;
 }
 .timeline-stops-unified .timeline-stop-item:last-child {
   border-bottom: none;
 }
-.timeline-stop-item {
-  border-bottom: 1px solid #e2e8f0;
-  padding: 6px 8px;
-}
-.timeline-stop-item:last-child {
-  border-bottom: none;
+.timeline-stops-unified .timeline-stop-item.current-stop {
+  background: #f8faff;
+  border-left-color: #2563eb;
 }
 
 /* Map Route Legend & Controls */
