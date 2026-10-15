@@ -1170,8 +1170,20 @@ function LiveTracking() {
  const [focusedVehicleId, setFocusedVehicleId] = useState<string>('veh-8993');
  const [isVehicleFocused, setIsVehicleFocused] = useState<boolean>(false);
  const [isShuttleFilterOpen, setIsShuttleFilterOpen] = useState(false);
+ const [isDistanceAuditOpen, setIsDistanceAuditOpen] = useState(false);
  const [openDropdown, setOpenDropdown] = useState<'vendor' | 'office' | 'shift' | null>(null);
  const [vendorSearch, setVendorSearch] = useState('');
+
+ useEffect(() => {
+  const handleKeyDown = (e: KeyboardEvent) => {
+   if (e.key === 'Escape') {
+    if (isDistanceAuditOpen) setIsDistanceAuditOpen(false);
+    if (isShuttleFilterOpen) setIsShuttleFilterOpen(false);
+   }
+  };
+  window.addEventListener('keydown', handleKeyDown);
+  return () => window.removeEventListener('keydown', handleKeyDown);
+ }, [isDistanceAuditOpen, isShuttleFilterOpen]);
 
  // Draft filter states (inside popup)
  const [draftVendor, setDraftVendor] = useState('All');
@@ -1827,8 +1839,9 @@ function LiveTracking() {
            className="detail-audit-link"
            onClick={e => {
             e.stopPropagation();
-            alert("Distance Audits: 28.4 km total tracked vs 26.1 km planned (+2.3 km deviation audit)");
+            setIsDistanceAuditOpen(true);
            }}
+           title="View Distance Audit Log"
           >
            Distance Audits
           </button>
@@ -2487,6 +2500,76 @@ function LiveTracking() {
        }}
       >
        Apply
+      </button>
+     </div>
+    </div>
+   </div>
+  )}
+
+  {/* Distance Audit Log Modal (Trackzee / Uffizio Enterprise UI) */}
+  {isDistanceAuditOpen && (
+   <div
+    className="audit-modal-overlay"
+    onClick={() => setIsDistanceAuditOpen(false)}
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="audit-modal-title"
+   >
+    <div
+     className="audit-modal-container"
+     onClick={e => e.stopPropagation()}
+    >
+     {/* 1. Header */}
+     <div className="audit-modal-header">
+      <div className="audit-modal-header-text">
+       <span id="audit-modal-title" className="audit-modal-title">Distance Audit Log</span>
+       <span className="audit-modal-subtitle">
+        Trip #{activeShuttleTrip?.tripId ? activeShuttleTrip.tripId.replace(/^[Tt]rip-?/, '') : '1020959'}
+       </span>
+      </div>
+      <button
+       type="button"
+       className="audit-modal-close"
+       onClick={() => setIsDistanceAuditOpen(false)}
+       title="Close"
+       aria-label="Close"
+      >
+       <X size={15} />
+      </button>
+     </div>
+
+     {/* 2. Body */}
+     <div className="audit-modal-body">
+      {/* Row 1: Planned Map Distance */}
+      <div className="audit-modal-row">
+       <span className="audit-row-label">Planned Map Distance</span>
+       <span className="audit-row-value">28.4 km</span>
+      </div>
+
+      {/* Row 2: Actual GPS Odometer Distance */}
+      <div className="audit-modal-row">
+       <span className="audit-row-label">Actual GPS Odometer Distance</span>
+       <span className="audit-row-value">29.1 km</span>
+      </div>
+
+      {/* Row 3: Variance / Deviation */}
+      <div className="audit-modal-row audit-row-highlight">
+       <span className="audit-row-label audit-label-strong">Variance / Deviation</span>
+       <div className="audit-row-value-group">
+        <span className="audit-variance-value is-within">+0.7 km</span>
+        <span className="audit-status-badge status-within">Within Policy Limit</span>
+       </div>
+      </div>
+     </div>
+
+     {/* 3. Footer */}
+     <div className="audit-modal-footer">
+      <button
+       type="button"
+       className="audit-btn-close"
+       onClick={() => setIsDistanceAuditOpen(false)}
+      >
+       Close
       </button>
      </div>
     </div>

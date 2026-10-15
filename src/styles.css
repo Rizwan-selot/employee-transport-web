@@ -2086,3 +2086,205 @@ button,input,select { font:inherit; } button { cursor:pointer; } input[type=chec
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   z-index: 1000;
 }
+
+/* ========================================================
+   DISTANCE AUDIT LOG MODAL (Trackzee / Uffizio Enterprise UI)
+   ======================================================== */
+.audit-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(0.5px);
+  animation: modalFadeIn 0.15s ease-out;
+}
+
+.audit-modal-container {
+  width: 500px;
+  max-width: calc(100vw - 32px);
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 5px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+  animation: modalFadeIn 0.15s ease-out;
+}
+
+.audit-modal-header {
+  height: 44px;
+  background: #0d2149;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.audit-modal-header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.audit-modal-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+  letter-spacing: 0.1px;
+}
+
+.audit-modal-subtitle {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.1;
+}
+
+.audit-modal-close {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  cursor: pointer;
+  padding: 0;
+  opacity: 0.85;
+  transition: opacity 0.12s, background 0.12s;
+}
+
+.audit-modal-close:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.audit-modal-close svg {
+  width: 15px;
+  height: 15px;
+  stroke-width: 2.2;
+}
+
+.audit-modal-body {
+  padding: 4px 18px;
+  background: #ffffff;
+}
+
+.audit-modal-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.audit-row-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #475569;
+}
+
+.audit-row-value {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #0f172a;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.audit-modal-row.audit-row-highlight {
+  border-top: 1px solid #cbd5e1;
+  border-bottom: none;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  margin-top: 2px;
+}
+
+.audit-label-strong {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.audit-row-value-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.audit-variance-value {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.audit-variance-value.is-within {
+  color: #15803d;
+}
+
+.audit-variance-value.is-outside {
+  color: #dc2626;
+}
+
+.audit-status-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 3px;
+  line-height: 1.2;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.audit-status-badge.status-within {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.audit-status-badge.status-outside {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.audit-modal-footer {
+  padding: 10px 18px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.audit-btn-close {
+  height: 28px;
+  padding: 0 16px;
+  font-size: 11.5px;
+  font-weight: 600;
+  background: #0d2149;
+  border: 1px solid #0d2149;
+  border-radius: 3px;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.audit-btn-close:hover {
+  background: #1e3a8a;
+  border-color: #1e3a8a;
+}
