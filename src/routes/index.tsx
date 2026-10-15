@@ -1181,6 +1181,7 @@ function LiveTracking() {
  const [isShuttleFilterOpen, setIsShuttleFilterOpen] = useState(false);
  const [isDistanceAuditOpen, setIsDistanceAuditOpen] = useState(false);
  const [openDropdown, setOpenDropdown] = useState<'vendor' | 'office' | 'shift' | null>(null);
+ const [kpiStatusFilter, setKpiStatusFilter] = useState<string | null>(null);
  const [vendorSearch, setVendorSearch] = useState('');
 
  useEffect(() => {
@@ -1233,6 +1234,7 @@ function LiveTracking() {
   if (appliedOffices.length > 0 && !appliedOffices.includes(s.office)) return false;
   if (appliedShifts.length > 0 && !appliedShifts.includes(s.shiftChip)) return false;
   if (appliedDelayedOnly && !s.isLate) return false;
+  if (kpiStatusFilter && s.status !== kpiStatusFilter) return false;
 
   return true;
  });
@@ -1500,17 +1502,35 @@ function LiveTracking() {
         <>
          <div className="kpi-strip">
           {[
-           { n: 2, l: 'Running', c: 'running' },
-           { n: 1, l: 'Completed', c: 'completed' },
-            { n: 1, l: 'Upcoming', c: 'upcoming' },
-            { n: 0, l: 'Failed', c: 'failed' },
-           { n: 4, l: 'Total', c: 'total' },
-          ].map(k => (
-           <div key={k.l} className={`kpi ${k.c}`}>
-            <strong>{k.n}</strong>
-            <span>{k.l}</span>
-           </div>
-          ))}
+           { n: shuttleTrips.filter(t => t.status === 'running').length, l: 'Running', c: 'running', icon: CheckCircle2 },
+           { n: shuttleTrips.filter(t => t.status === 'completed').length, l: 'Completed', c: 'completed', icon: Check },
+           { n: shuttleTrips.filter(t => t.status === 'upcoming').length, l: 'Upcoming', c: 'upcoming', icon: Clock },
+           { n: shuttleTrips.filter(t => t.status === 'failed').length, l: 'Failed', c: 'failed', icon: XCircle },
+           { n: shuttleTrips.length, l: 'Total', c: 'total', icon: Grid3X3 },
+          ].map(k => {
+           const Icon = k.icon;
+           const isActive = kpiStatusFilter === k.c;
+           return (
+            <div
+             key={k.l}
+             className={`kpi ${k.c} ${isActive ? 'is-active' : ''}`}
+             onClick={() => {
+              if (k.c === 'total') {
+               setKpiStatusFilter(null);
+              } else {
+               setKpiStatusFilter(prev => prev === k.c ? null : k.c);
+              }
+             }}
+             title={`Filter by ${k.l}`}
+            >
+             <div className="kpi-top">
+              <Icon size={13} />
+              <strong>{k.n}</strong>
+             </div>
+             <span>{k.l}</span>
+            </div>
+           );
+          })}
          </div>
 
          <div className="search-toolbar">
