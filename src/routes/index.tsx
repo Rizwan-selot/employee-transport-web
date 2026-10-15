@@ -1901,19 +1901,29 @@ function LiveTracking() {
          </div>
 
          {/* Vehicle Row with divider */}
-         <div className="detail-info-strip">
+         <div className="detail-info-strip detail-vehicle-strip">
           <div className="detail-strip-icon-box">
            <BusFront size={14} />
           </div>
-          <div className="detail-strip-main">
-           <div className="detail-vehicle-header">
-            <span className="detail-strip-name">
-             {activeVehicle?.vehicleNumber || shuttleDetailData.vehicle?.number || <span className="detail-not-assigned">Not assigned</span>}
-            </span>
-            {shuttleDetailData.vehicle?.number && (
-             <span className="detail-strip-sub">
-              Fleet {shuttleDetailData.vehicle.fleet} | {shuttleDetailData.vehicle.capacity} | {shuttleDetailData.vehicle.type}
+          <div className="detail-vehicle-content">
+           <div className="detail-vehicle-main-row">
+            <div className="detail-vehicle-identity">
+             <span className="detail-vehicle-num">
+              {activeVehicle?.vehicleNumber || shuttleDetailData.vehicle?.number || <span className="detail-not-assigned">Not assigned</span>}
              </span>
+             {(activeVehicle?.vehicleNumber || shuttleDetailData.vehicle?.number) && (
+              <span className="detail-vehicle-fleet">
+               Fleet {activeVehicle?.vehicleNumber ? (activeVehicle.vehicleNumber.match(/\d+$/)?.[0] || shuttleDetailData.vehicle?.fleet || '8993') : (shuttleDetailData.vehicle?.fleet || '8993')}
+              </span>
+             )}
+            </div>
+            {shuttleDetailData.vehicle?.capacity && (
+             <div className="detail-vehicle-attrs">
+              <span className="detail-vehicle-attr-tag">{shuttleDetailData.vehicle.capacity}</span>
+              {shuttleDetailData.vehicle.type && (
+               <span className="detail-vehicle-attr-tag">{shuttleDetailData.vehicle.type}</span>
+              )}
+             </div>
             )}
            </div>
            {shuttleDetailData.vehicle?.previousNote && (
