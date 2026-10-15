@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, ChevronLeft, ChevronRight, ChevronUp, Sparkles, Phone, UserRound, Bell, Gauge, MapPin, FileText, ChartPie, Settings, Navigation, ClipboardList, UsersRound, Users, Grid3X3, Truck, Search, RefreshCw, Filter, ArrowDownAZ, KeyRound, Smartphone, Route as RouteIcon, Video, Camera, Volume2, Hand, Play, Pause, Star, Map, Radio, Tag, Scan, LocateFixed, ShieldCheck, Timer, TriangleAlert, ThumbsUp, Share2, MapPinned, BusFront, CircleArrowRight, Crosshair, CircleUserRound, PanelTop, Asterisk, Car, Zap, SlidersHorizontal, ChevronDown, Flag, X, Check, Building2, CheckCircle2, Clock, XCircle, Trash2, Edit3, ArrowLeftRight, Minus, Plus, ZoomIn, ZoomOut, type LucideIcon } from 'lucide-react';
+import { ArrowLeft, ChevronLeft, ChevronRight, ChevronUp, Sparkles, Phone, UserRound, Bell, Gauge, MapPin, FileText, ChartPie, Settings, Navigation, ClipboardList, UsersRound, Users, Grid3X3, Truck, Search, RefreshCw, Filter, ArrowDownAZ, KeyRound, Smartphone, Route as RouteIcon, Video, Camera, Volume2, Hand, Play, Pause, Star, Map, Radio, Tag, Scan, LocateFixed, ShieldCheck, Timer, TriangleAlert, ThumbsUp, Share2, MapPinned, BusFront, Fence, CircleArrowRight, Crosshair, CircleUserRound, PanelTop, Asterisk, Car, Zap, SlidersHorizontal, ChevronDown, Flag, X, Check, Building2, CheckCircle2, Clock, XCircle, Trash2, Edit3, ArrowLeftRight, Minus, Plus, ZoomIn, ZoomOut, type LucideIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import mapAsset from '@/assets/oklahoma-city-light.asset.json';
 import { busRouteCoords, car1RouteCoords, car2RouteCoords, shuttleStops } from '@/data/shuttle-real-routes';
@@ -1148,7 +1148,7 @@ function IndeterminateCheckbox({
 }
 
 function LiveTracking() {
- const [activeTab, setActiveTab] = useState<'trips' | 'shuttle' | 'object'>('trips');
+ const [activeTab, setActiveTab] = useState<'trips' | 'shuttle' | 'object'>('shuttle');
  const [selectedTripId, setSelectedTripId] = useState<string>('emp-11');
  const [tripsSearch, setTripsSearch] = useState<string>('');
  const [isTripsPlaying, setIsTripsPlaying] = useState<boolean>(true);
@@ -1460,18 +1460,19 @@ function LiveTracking() {
       {/* Front Face: Shuttle Listing Panel */}
       <div className="flip-front">
        <div className="object-tabs">
-        <IconButton icon={RouteIcon} label="Trips" onClick={() => setActiveTab('trips')}/>
-        <Button variant="legacy" className={`tab-btn ${activeTab === 'shuttle' ? 'is-active' : ''}`} onClick={() => setActiveTab('shuttle')}>
-         <BusFront size={14}/>
+        <IconButton icon={MapPin} label="Locations" />
+        <IconButton icon={BusFront} label="Vehicles" onClick={() => setActiveTab('trips')} />
+        <IconButton icon={Fence} label="Geofence" />
+        <IconButton icon={MapPinned} label="Landmarks" />
+        <IconButton icon={Video} label="Video Live Stream" />
+        <Button
+         variant="legacy"
+         className={`tab-btn ${activeTab === 'shuttle' ? 'is-active' : ''}`}
+         onClick={() => setActiveTab('shuttle')}
+        >
+         <BusFront size={16} />
          <span>Shuttle</span>
         </Button>
-        <IconButton icon={UserRound} label="Drivers"/>
-        <IconButton icon={Grid3X3} label="Grid"/>
-        <div className="header-scope" title="Active Scope">
-         <span>Super Admin Scope</span>
-         <ChevronDown size={12}/>
-        </div>
-        <IconButton icon={Settings} label="Object settings" className="settings-tab"/>
        </div>
 
        {activeTab === 'shuttle' ? (
